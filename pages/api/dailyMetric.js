@@ -1,5 +1,5 @@
 import connectDB from '../../lib/mongodb';
-import DailyMetric from '../../models/DailyMetrics.models'
+import DailyMetric from '../../models/DailyMetric.models'
 
 const handler = async(req, res) => {
   const metrics  = await DailyMetric.find();
