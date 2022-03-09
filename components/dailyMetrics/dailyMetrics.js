@@ -1,10 +1,10 @@
 import React from 'react'
 
-export default function metricData({ metricData }) {
+export default function metricData({ metricsData }) {
     return (
         <>
             <div>Metrics</div>
-            <p>{metricData.walk}</p>
+            <p>{metricsData.walk}</p>
         </>
     )
 }

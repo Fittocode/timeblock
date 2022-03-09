@@ -3,26 +3,49 @@ const {Schema, model} = mongoose
 
 const dailyMetricSchema = new Schema(
     {
+        date: {
+            type: Date,
+            default: Date.now
+        },
         walk: {
-            type: String
+            type: mongoose.Types.Decimal128,
+            required: true,
         }, 
-        stoicMed: {
-            type: Boolean
+        stoic_med: {
+            type: Boolean,
+            required: true,
         },
         meditation: {
-            type: String
+            type: Number,
+            required: true,
         },
-        exercise: {
-            type: String,
-        },
+        exercise: [{
+            kind: {
+                type: String,
+                required: true,
+            },
+            duration: {
+                type: mongoose.Types.Decimal128,
+                required: true,
+            }
+        }],
         tranquility: {
-            type: String,
+            type: Number,
+            min: 1,
+            max: 10,
+            required: true,
         },
-        deepWork: {
-            type: String
+        deep_work: {
+            type: mongoose.Types.Decimal128,
+            required: true,
+        },
+        freedom_active: {
+            type: Boolean,
+            required: true,
         },
         read: {
-            type: String
+            type: Number,
+            required: true,
         },
     },
 )

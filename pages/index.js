@@ -1,7 +1,10 @@
 import Head from 'next/head'
 import Link from 'next/link'
+import MetricsDate from '../components/date'
+import connectDB from '../lib/mongodb'
+import MetricsDB from '../models/DailyMetric.models'
 
-export default function Home() {
+export default function Home({ allMetrics }) {
   return (
     <div className="container">
       <Head>
@@ -18,9 +21,13 @@ export default function Home() {
           Track and Display your Metrics Over Time
         </p>
 
-        <div className="grid">
-          
-        </div>
+            {allMetrics.map((dMetrics) => (
+              <Link href={{pathname: "/posts/[id]", id: dMetrics._id}} as={`posts/${dMetrics._id}`}>
+                <a>
+                  <MetricsDate dateString={dMetrics.date} />
+                </a>
+              </Link>
+            ))}
       </main>
 
       <footer>
@@ -173,4 +180,23 @@ export default function Home() {
       `}</style>
     </div>
   )
+}
+
+/* Retrieves metrics data from mongodb database */
+export async function getServerSideProps() {
+  await connectDB()
+
+  /* find all the data in our database */
+  const result = await MetricsDB.find({})
+  const allMetrics = result.map((doc) => {
+    let daysMetrics = doc.toObject()
+    function serializeObject() {
+      for (let metric in daysMetrics) {
+        daysMetrics[metric] = daysMetrics[metric].toString()
+      }
+      return daysMetrics
+    }
+    return serializeObject(daysMetrics)
+  })
+  return { props: { allMetrics: allMetrics } }
 }
