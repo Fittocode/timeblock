@@ -1,4 +1,5 @@
 import React from 'react'
+import Link from 'next/link'
 import MetricsDate from '../../components/date'
 
 export default function metricData({...metrics}) {
@@ -18,6 +19,9 @@ export default function metricData({...metrics}) {
                     <p>Freedom active? {metrics.freedom_active.toString()}</p>
                     <p>Read: {metrics.read} minutes</p>
                 </div>
+            <Link href="/">
+                <a>Home</a>
+            </Link>
         </>
     )
 }

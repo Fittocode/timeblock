@@ -20,7 +20,9 @@ export default function Home({ allMetrics }) {
         <p className="description">
           Track and Display your Metrics Over Time
         </p>
-
+        <Link href='/addMetrics'>
+          <a>Add Metrics</a>
+        </Link>
             {allMetrics.map((dMetrics) => (
               <Link href={{pathname: "/posts/[id]", query: {id: dMetrics._id}}} as={`/posts/${dMetrics._id}`}>
                 <a>
