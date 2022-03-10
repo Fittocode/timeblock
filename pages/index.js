@@ -20,7 +20,7 @@ export default function Home({ allMetrics }) {
         <p className="description">
           Track and Display your Metrics Over Time
         </p>
-        <Link href='/addMetrics'>
+        <Link href='/posts/addMetrics'>
           <a>Add Metrics</a>
         </Link>
             {allMetrics.map((dMetrics) => (
