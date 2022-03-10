@@ -22,7 +22,7 @@ export default function Home({ allMetrics }) {
         </p>
 
             {allMetrics.map((dMetrics) => (
-              <Link href={{pathname: "/posts/[id]", query: {id: dMetrics._id}}} as={`posts/${dMetrics._id}`}>
+              <Link href={{pathname: "/posts/[id]", query: {id: dMetrics._id}}} as={`/posts/${dMetrics._id}`}>
                 <a>
                   <MetricsDate dateString={dMetrics.date} />
                 </a>

@@ -1,13 +1,15 @@
 import Head from 'next/head'
 import { useEffect, useState } from 'react'
+import { useRouter } from 'next/router'
 import DailyMetrics from '../../components/dailyMetrics/dailyMetrics'
 
 export default function DayMetrics() {
 
     const [data, setData] = useState(null)
     const [isLoading, setLoading] = useState(false)
+    const router = useRouter()
 
-    useEffect((req, res) => {
+    useEffect(() => {
       setLoading(true)
       fetch('../api/metrics')
       .then((res) => res.json())
@@ -20,14 +22,15 @@ export default function DayMetrics() {
     if (isLoading) return <p>Loading...</p>
     if (!data) return <p>No metrics data</p>
 
-    console.log(data.metrics)
+    const id = router.query.id
+    let metrics = data.metrics.find(x => x._id === id)
 
     return (
       <>
         <Head>
           <title></title>
         </Head>
-        <DailyMetrics {...data} />
+        <DailyMetrics {...metrics} />
       </>
     )
   }
