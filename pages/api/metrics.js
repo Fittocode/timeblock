@@ -8,8 +8,8 @@ export default async function handler(req, res) {
   switch (method) {
     case 'GET':
       try {
-        const metrics = MetricsDB.find({}) /* find all data in database */
-        res.status(200).json({success: true, data: metrics})
+        const metrics = await MetricsDB.find({}) /* find all data in database */
+        res.status(200).json({success: true, metrics: metrics})
       } catch (error) {
         res.status(400).json({success: false})
       }
@@ -19,7 +19,7 @@ export default async function handler(req, res) {
         const metrics = await MetricsDB.create(
           req.body
         ) /* create new model in database */
-        res.status(201).json({success: true, data: metrics})
+        res.status(201).json({success: true, metrics: metrics})
       } catch(error) {
         res.status(400).json({success: false})
       }

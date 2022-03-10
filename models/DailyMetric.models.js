@@ -8,7 +8,7 @@ const dailyMetricSchema = new Schema(
             default: Date.now
         },
         walk: {
-            type: mongoose.Types.Decimal128,
+            type: Number,
             required: true,
         }, 
         stoic_med: {
@@ -25,7 +25,7 @@ const dailyMetricSchema = new Schema(
                 required: true,
             },
             duration: {
-                type: mongoose.Types.Decimal128,
+                type: Number,
                 required: true,
             }
         }],
@@ -36,7 +36,7 @@ const dailyMetricSchema = new Schema(
             required: true,
         },
         deep_work: {
-            type: mongoose.Types.Decimal128,
+            type: Number,
             required: true,
         },
         freedom_active: {
