@@ -8,7 +8,7 @@ export default function addMetrics() {
       <>
         <div>Add Day's Metrics</div>
         <br />
-        <AddMetricsForm />
+        <AddMetricsForm formId="add-metrics-form"/>
         <br />
         <Link href="/">
           <a>Home</a>

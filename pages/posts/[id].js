@@ -2,6 +2,7 @@ import Head from 'next/head'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import DailyMetrics from '../../components/dailyMetrics/dailyMetrics'
+import { setDate } from 'date-fns'
 
 export default function DayMetrics() {
 
@@ -9,14 +10,12 @@ export default function DayMetrics() {
     const [isLoading, setLoading] = useState(false)
     const router = useRouter()
 
-    useEffect(() => {
+    useEffect(async () => {
       setLoading(true)
-      fetch('../api/metrics')
-      .then((res) => res.json())
-      .then((data) => {
-        setData(data)
-        setLoading(false)
-      })
+      const res = await fetch('../api/metrics')
+      const data = await res.json()
+      await setData(data)
+      await setLoading(false)
     }, [])
 
     if (isLoading) return <p>Loading...</p>

@@ -19,16 +19,10 @@ const dailyMetricSchema = new Schema(
             type: Number,
             required: true,
         },
-        exercise: [{
-            kind: {
-                type: String,
-                required: true,
-            },
-            duration: {
-                type: Number,
-                required: true,
-            }
-        }],
+        exercise: {
+            type: String,
+            required: true,
+        },
         tranquility: {
             type: Number,
             min: 1,

@@ -1,50 +1,148 @@
-import React from 'react'
+import { useState } from 'react'
+import { useRouter } from 'next/router'
 
-export default function addMetricsForm() {
-  
+export default function addMetricsForm({ formId }) {
+  const router = useRouter()
+  const contentType = 'application/json'
+
+  const [errors, setErrors] = useState({})
+
+  const metricsForm = {
+    date: '',
+    walk: 0,
+    stoic_med: true,
+    meditation: 0,
+    exercise: '',
+    tranquility: 0,
+    deep_work: 0,
+    freedom_active: true,
+    read: 0,
+  }
+
+  const [form, setForm] = useState({
+    date: metricsForm.date,
+    walk: metricsForm.walk,
+    stoic_med: metricsForm.stoic_med,
+    meditation: metricsForm.meditation,
+    exercise: metricsForm.exercise,
+    tranquility: metricsForm.tranquility,
+    deep_work: metricsForm.deep_work,
+    freedom_active: metricsForm.freedom_active,
+    read: metricsForm.read,
+  })
+
+    const postMetrics = async (form) => {
+      try {
+        const res = await fetch('/api/metrics', {
+          method: 'POST',
+          headers: {
+            Accept: contentType,
+            'Content-Type': contentType,
+          },
+          body: JSON.stringify(form)
+        })
+        if (!res.ok) {
+          throw new Error(res.status)
+        }
+        router.push('/')
+      } catch(error) {
+        console.log(error.message)
+      }
+    }
+
+    const handleChange = (e) => {
+      const target = e.target
+      const value = target.value
+      const name = target.name
+
+      setForm({
+        ...form,
+        [name]: value
+      })
+    }
+
+    const handleSubmit = (e) => {
+      e.preventDefault()
+      const errs = formValidate()
+      if (Object.keys(errs).length === 0) {
+        postData(form)
+      } else {
+        setErrors({errs})
+      }
+      postMetrics(form)
+    }
+
+    const formValidate = () => {
+      let err = {}
+      if (!form.date) err.date = 'Date is required'
+      if (!form.walk) err.walk = 'Walk is required'
+      if (!form.stoic_med) err.stoic_med = 'Stoic Meditation is required'
+      if (!form.meditation) err.meditation = 'Meditation is required'
+      if (!form.exercise) err.exercise = 'Exercise is required'
+      if (!form.tranquility) err.tranquility = 'Tranquility is required'
+      if (!form.deep_work) err.deep_work = 'Deep Work is required'
+      if (!form.freedom_active) err.freedom_active = 'Freedom is required'
+      if (!form.read) err.read = 'Reading session is required'
+      return err
+    }
+
     return (
       <>
-        <form action="">
+        <form id={formId} onSubmit={handleSubmit}>
 
-          <label>Date: {' '}
-            <input type="date" name="date" />
+          <label htmlFor='date'>Date: {' '}
+            <input type="date" name="date" value={form.date} onChange={handleChange} required/>
           </label>
           <br />
-          <label>Walk: {' '}
-            <input type="number" name="walk" />
+          <label htmlFor='walk'>Walk: {' '}
+            <input type="number" name="walk" value={form.walk} onChange={handleChange} required/>
           </label>
           <br />
-          <label>Stoic Meditation: {' '}
-            <input type="boolean" name="stoic" />
+          <label htmlFor='stoic_med'>Stoic Meditation: {' '}
+            <select value={form.stoic_med} onChange={handleChange} required>
+              <option value="true">Yes</option>
+              <option value="false">No</option>
+            </select>
           </label>
           <br />
-          <label>Mindfulness Meditation: {' '}
-            <input type="number" name="meditation" />
+          <label htmlFor='meditation'>Mindfulness Meditation: {' '}
+            <select value={form.meditation} onChange={handleChange} required>
+              <option value="0">0</option>
+              <option value="10">10</option>
+              <option value="10">20</option>
+            </select>
           </label>
           <br />
-          <label>Exercise: {' '}
-            <input type="text" name="kind" placeholder='type'/> {' '}
-            <input type="number" name="duration" placeholder='duration' />
+          <label htmlFor='exercise'>Exercise: {' '}
+            <input type="text" name="exercise" value={form.exercise} onChange={handleChange} required/> {' '}
           </label>
           <br />
-          <label>Deep Work: {' '}
-            <input type="number" name="deepWork" />
+          <label htmlFor='deep_work'>Deep Work: {' '}
+            <input type="number" name="deep_work" value={form.deep_work} onChange={handleChange} required/>
           </label>
           <br />
-          <label>Freedom active: {' '}
-            <input type="boolean" name="freedom" />
+          <label htmlFor='freedom_active'>Freedom active: {' '}
+            <select value={form.freedom_active} onChange={handleChange} required>
+              <option value="true">Yes</option>
+              <option value="false">No</option>
+            </select>
           </label>
           <br />
-          <label>Read: {' '}
-            <input type="number" name="read" />
+          <label htmlFor='read'>Read: {' '}
+            <input type="number" name="read" value={form.read} onChange={handleChange} required/>
           </label>
           <br />
-          <label>Tranquility: {' '}
-            <input type="number" name="tranquility" />
+          <label htmlFor='tranquility'>Tranquility: {' '}
+            <input type="number" name="tranquility" value={form.tranquility} onChange={handleChange} required/>
           </label>
           <br />
-          <input type="submit" value="submit" />
+          <button type="submit">Submit</button>
         </form>
+        <div>
+          {Object.keys(errors).map((err, index) => (
+            <li key={index}>{err}</li>
+          ))}
+        </div>
       </>
     )
 }
