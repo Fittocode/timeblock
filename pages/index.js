@@ -20,7 +20,7 @@ export default function Home({ allMetrics }) {
 
       <main>
         <h1 className="title">
-          Daily Timeblock
+          Daily Metrics
         </h1>
 
         <p className="description">

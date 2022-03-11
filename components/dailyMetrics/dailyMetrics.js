@@ -18,6 +18,8 @@ export default function metricData({...metrics}) {
                     <p>Deep Work: {metrics.deep_work} hours</p>
                     <p>Freedom active: {metrics.freedom_active.toString()}</p>
                     <p>Read: {metrics.read} minutes</p>
+                    <p>Junk food: {(metrics.junk_food) ? metrics.junk_food.toString() : 'false'}</p>
+                    <p>Seizure: {(metrics.seizure) ? metrics.seizure.toString() : 'false'}</p>
                 </div>
             <Link href="/">
                 <a>Home</a>

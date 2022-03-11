@@ -17,6 +17,8 @@ export default function addMetricsForm({ formId }) {
     deep_work: '',
     freedom_active: true,
     read: '',
+    junk_food: false,
+    seizure: false,
   })
 
     const postMetrics = async (form) => {
@@ -86,8 +88,8 @@ export default function addMetricsForm({ formId }) {
           <br />
           <label htmlFor='stoic_med'>Stoic Meditation: {' '}
             <select value={form.stoic_med} name="stoic_med" onChange={handleChange} required>
-              <option value="true">Yes</option>
               <option value="false">No</option>
+              <option value="true">Yes</option>
             </select>
           </label>
           <br />
@@ -126,6 +128,20 @@ export default function addMetricsForm({ formId }) {
           <br />
           <label htmlFor='read'>Read: {' '}
             <input type="number" name="read" value={form.read} placeholder='Minutes' onChange={handleChange} required/>
+          </label>
+          <br />
+          <label htmlFor='junk_food'>Junk Food: {' '}
+            <select value={form.junk_food} name="junk_food" onChange={handleChange} required>
+              <option value="false">No</option>
+              <option value="true">Yes</option>
+            </select>
+          </label>
+          <br />
+          <label htmlFor='seizure'>Seizure: {' '}
+            <select value={form.seizure} name="seizure" onChange={handleChange} required>
+              <option value="false">No</option>
+              <option value="true">Yes</option>
+            </select>
           </label>
           <br />
           <label htmlFor='tranquility'>Tranquility: {' '}

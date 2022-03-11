@@ -11,6 +11,8 @@ export default function overviewMetrics({ allMetrics }) {
     let smCompletionNo = 0
     let freedomCompletionNo = 0
     let medCompletionNo = 0
+    let totalJunkDays = 0
+    let totalSeizures = 0
 
     allMetrics.map((entry) => {
         totalWalkMiles += Number(entry.walk)
@@ -18,6 +20,7 @@ export default function overviewMetrics({ allMetrics }) {
         totalDeepWorkHours += Number(entry.deep_work)
         totalReadMinutes += Number(entry.read)
         avgTranquility += Number(entry.tranquility)
+        if (entry.seizure) totalSeizures++
     })
     
     const findRoundedTotal = (metric, converter, decimal) => {
@@ -34,33 +37,32 @@ export default function overviewMetrics({ allMetrics }) {
     totalWalkMiles = findRoundedTotal(totalWalkMiles, 1, 10)
 
     // find rounded avg
-    let avgDailyMed = findRoundedAvg(totalMedMinutes, 1)
     let avgDailyReading = findRoundedAvg(totalReadMinutes, 1)
     let avgDailyWalkMiles = findRoundedAvg(totalWalkMiles, 10)
     let avgDailyDW = findRoundedAvg(totalDeepWorkHours, 10)
     avgTranquility = findRoundedAvg(avgTranquility, 10)
 
-    // find all valid exercise days
+    // find percentage of days where metric completed/valid
     let calcCompletionRate = (data, metric, value1, value2, completionNo) => {
+        let possibleEntries = 0
+        completionNo = 0
         data.map((entry) => {
             if (entry[metric] !== value1 && entry[metric] !== value2) completionNo++
-            console.log(entry.freedom_active)
+            if (entry[metric] !== undefined) possibleEntries++
         })
-        return Math.round((completionNo / allMetrics.length) * 100) / 100
+        console.log(completionNo)
+        return Math.round((completionNo / possibleEntries) * 100) / 100
     }
     
     let exerciseCompletionPercent = calcCompletionRate(allMetrics, 'exercise', 'None', 'Incomplete', exerciseCompletionNo)
     let smCompletionPercent = calcCompletionRate(allMetrics, 'stoic_med', 'false', '', smCompletionNo)
     let freedomActivePercent = calcCompletionRate(allMetrics, 'freedom_active', 'false', '', freedomCompletionNo)
     let medCompletionPercent = calcCompletionRate(allMetrics, 'meditation', '0', '', medCompletionNo)
-
-    console.log(smCompletionPercent)
-    console.log(exerciseCompletionPercent)
-    console.log(freedomActivePercent)
+    let junkFoodCompletionPercent = calcCompletionRate(allMetrics, 'junk_food', 'true', undefined, totalJunkDays)
 
     // convert from decimal (0.92) to percentage (92)
-    const convertToPercentage= (metric) => {
-        let percentage
+    const convertToPercentage = (metric) => {
+        let percentage = 0
         if (metric == '1') return '100'
         else percentage = metric.toString().split('').splice(2, 2).join('')
         if (percentage.split('').length === 1) percentage += 0
@@ -70,18 +72,16 @@ export default function overviewMetrics({ allMetrics }) {
     return (
         <>
             <div>Metrics Overview</div>
-            <p>Total Walking Distance: {totalWalkMiles} miles </p>
-            <p>Average Daily Walking Distance: {avgDailyWalkMiles} miles</p>
-            <p>Daily Stoic Med Completion: {convertToPercentage(smCompletionPercent)}%</p>
-            <p>Total Meditation: {totalMedHours} hours</p>
-            <p>Daily Meditation Completion: {convertToPercentage(medCompletionPercent)}%</p>
-            <p>Daily Exercise Completion: {convertToPercentage(exerciseCompletionPercent)}%</p>
-            <p>Total Deep Work: {totalDeepWorkHours} hours</p>
-            <p>Average Daily Deep Work: {avgDailyDW} hours</p>
-            <p>Daily Active Freedom Rate: {convertToPercentage(freedomActivePercent)}%</p>
-            <p>Total Reading: {totalReadHours} Hours</p>
-            <p>Average Daily Reading: {avgDailyReading} Minutes</p>
-            <p>Average Tranquility: {avgTranquility}</p>
+            <p>You rate your daily tranquility a {avgTranquility} out of 10 on average</p>
+            <p>You have walked {totalWalkMiles} miles in total for an average of {avgDailyWalkMiles} miles per day</p>
+            <p>You have completed {totalDeepWorkHours} hours of deep work in total for an average of {avgDailyDW} hours per day</p>
+            <p>You have spent {totalReadHours} hours in total reading books for an average of {avgDailyReading} minutes per day</p>
+            <p>You meditate on {convertToPercentage(medCompletionPercent)}% of days, totaling {totalMedHours} hours</p>
+            <p>You complete a stoic meditation on {convertToPercentage(smCompletionPercent)}% of days</p>
+            <p>You complete your exercise on {convertToPercentage(exerciseCompletionPercent)}% of days</p>
+            <p>You keep Freedom active on {convertToPercentage(freedomActivePercent)}% of days</p>
+            <p>You abstain from junk food (chips, sweets, alcohol) on {convertToPercentage(junkFoodCompletionPercent)}% of days.</p>
+            <p>You've had {totalSeizures} seizure.</p>
         </>
     )
 }

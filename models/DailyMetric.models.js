@@ -41,6 +41,14 @@ const dailyMetricSchema = new Schema(
             type: String,
             required: true,
         },
+        junk_food: {
+            type: Boolean,
+            required: true
+        },
+        seizure: {
+            type: Boolean,
+            required: true
+        }
     },
 )
 
