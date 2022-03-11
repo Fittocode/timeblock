@@ -7,28 +7,16 @@ export default function addMetricsForm({ formId }) {
 
   const [errors, setErrors] = useState({})
 
-  const metricsForm = {
-    date: '',
-    walk: 0,
-    stoic_med: true,
-    meditation: 0,
-    exercise: '',
-    tranquility: 0,
-    deep_work: 0,
-    freedom_active: true,
-    read: 0,
-  }
-
   const [form, setForm] = useState({
-    date: metricsForm.date,
-    walk: metricsForm.walk,
-    stoic_med: metricsForm.stoic_med,
-    meditation: metricsForm.meditation,
-    exercise: metricsForm.exercise,
-    tranquility: metricsForm.tranquility,
-    deep_work: metricsForm.deep_work,
-    freedom_active: metricsForm.freedom_active,
-    read: metricsForm.read,
+    date: '',
+    walk: '',
+    stoic_med: true,
+    meditation: '0',
+    exercise: '',
+    tranquility: '',
+    deep_work: '',
+    freedom_active: true,
+    read: '',
   })
 
     const postMetrics = async (form) => {
@@ -54,7 +42,6 @@ export default function addMetricsForm({ formId }) {
       const target = e.target
       const value = target.value
       const name = target.name
-
       setForm({
         ...form,
         [name]: value
@@ -65,11 +52,10 @@ export default function addMetricsForm({ formId }) {
       e.preventDefault()
       const errs = formValidate()
       if (Object.keys(errs).length === 0) {
-        postData(form)
+        postMetrics(form)
       } else {
         setErrors({errs})
       }
-      postMetrics(form)
     }
 
     const formValidate = () => {
@@ -91,25 +77,25 @@ export default function addMetricsForm({ formId }) {
         <form id={formId} onSubmit={handleSubmit}>
 
           <label htmlFor='date'>Date: {' '}
-            <input type="date" name="date" value={form.date} onChange={handleChange} required/>
+            <input type="text" name="date" value={form.date} onChange={handleChange} required/>
           </label>
           <br />
           <label htmlFor='walk'>Walk: {' '}
-            <input type="number" name="walk" value={form.walk} onChange={handleChange} required/>
+            <input type="number" name="walk" value={form.walk} onChange={handleChange} required/> (in miles)
           </label>
           <br />
           <label htmlFor='stoic_med'>Stoic Meditation: {' '}
-            <select value={form.stoic_med} onChange={handleChange} required>
+            <select value={form.stoic_med} name="stoic_med" onChange={handleChange} required>
               <option value="true">Yes</option>
               <option value="false">No</option>
             </select>
           </label>
           <br />
           <label htmlFor='meditation'>Mindfulness Meditation: {' '}
-            <select value={form.meditation} onChange={handleChange} required>
+            <select value={form.meditation} name="meditation" onChange={handleChange} required>
               <option value="0">0</option>
               <option value="10">10</option>
-              <option value="10">20</option>
+              <option value="20">20</option>
             </select>
           </label>
           <br />
@@ -122,14 +108,14 @@ export default function addMetricsForm({ formId }) {
           </label>
           <br />
           <label htmlFor='freedom_active'>Freedom active: {' '}
-            <select value={form.freedom_active} onChange={handleChange} required>
+            <select value={form.freedom_active} name="freedom_active" onChange={handleChange} required>
               <option value="true">Yes</option>
               <option value="false">No</option>
             </select>
           </label>
           <br />
           <label htmlFor='read'>Read: {' '}
-            <input type="number" name="read" value={form.read} onChange={handleChange} required/>
+            <input type="number" name="read" value={form.read} onChange={handleChange} required/> (in minutes)
           </label>
           <br />
           <label htmlFor='tranquility'>Tranquility: {' '}

@@ -190,6 +190,7 @@ export async function getServerSideProps() {
 
   /* find all the data in our database */
   const result = await MetricsDB.find({})
+
   const allMetrics = result.map((doc) => {
     let daysMetrics = doc.toObject()
     function serializeObject() {

@@ -18,9 +18,10 @@ export default async function handler(req, res) {
       try {
         const metrics = await MetricsDB.create(
           req.body
-        ) /* create new model in database */
+          ) /* create new model in database */
         res.status(201).json({success: true, metrics: metrics})
       } catch(error) {
+        console.log('nope')
         res.status(400).json({success: false})
       }
       break;

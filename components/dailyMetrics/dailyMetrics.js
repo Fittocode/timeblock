@@ -16,7 +16,7 @@ export default function metricData({...metrics}) {
                     <p>Meditation: {metrics.meditation} minutes</p>
                     <p>Exercise: {metrics.exercise}</p>
                     <p>Deep Work: {metrics.deep_work} hours</p>
-                    <p>Freedom active? {metrics.freedom_active.toString()}</p>
+                    <p>Freedom active: {metrics.freedom_active.toString()}</p>
                     <p>Read: {metrics.read} minutes</p>
                 </div>
             <Link href="/">
