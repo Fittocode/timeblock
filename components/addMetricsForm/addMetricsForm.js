@@ -77,11 +77,11 @@ export default function addMetricsForm({ formId }) {
         <form id={formId} onSubmit={handleSubmit}>
 
           <label htmlFor='date'>Date: {' '}
-            <input type="text" name="date" value={form.date} onChange={handleChange} required/>
+            <input type="text" name="date" value={form.date} placeholder='m/dd/yy' onChange={handleChange} required/>
           </label>
           <br />
           <label htmlFor='walk'>Walk: {' '}
-            <input type="number" name="walk" value={form.walk} onChange={handleChange} required/> (in miles)
+            <input type="number" name="walk" value={form.walk} placeholder='Miles' onChange={handleChange} required/>
           </label>
           <br />
           <label htmlFor='stoic_med'>Stoic Meditation: {' '}
@@ -100,7 +100,16 @@ export default function addMetricsForm({ formId }) {
           </label>
           <br />
           <label htmlFor='exercise'>Exercise: {' '}
-            <input type="text" name="exercise" value={form.exercise} onChange={handleChange} required/> {' '}
+            <select name="exercise" value={form.exercise} onChange={handleChange} required>
+              <option value="">Select</option>
+              <option value="Simple and Sinister">Simple and Sinister</option>
+              <option value="Sprints">Sprints</option>
+              <option value="Climb">Climb</option>
+              <option value="Z2 Run">Z2 Run</option>
+              <option value="Jump Rope">Jump Rope</option>
+              <option value="Calisthenics">Calisthenics</option>
+            </select>
+
           </label>
           <br />
           <label htmlFor='deep_work'>Deep Work: {' '}
@@ -115,7 +124,7 @@ export default function addMetricsForm({ formId }) {
           </label>
           <br />
           <label htmlFor='read'>Read: {' '}
-            <input type="number" name="read" value={form.read} onChange={handleChange} required/> (in minutes)
+            <input type="number" name="read" value={form.read} placeholder='Minutes' onChange={handleChange} required/>
           </label>
           <br />
           <label htmlFor='tranquility'>Tranquility: {' '}
