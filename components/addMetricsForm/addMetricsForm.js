@@ -9,11 +9,11 @@ export default function addMetricsForm({ formId }) {
 
   const [form, setForm] = useState({
     date: '',
-    walk: '',
+    walk: 0,
     stoic_med: true,
     meditation: '0',
-    exercise: '',
-    tranquility: '',
+    exercise: 'None',
+    tranquility: 0,
     deep_work: '',
     freedom_active: true,
     read: '',
@@ -101,7 +101,8 @@ export default function addMetricsForm({ formId }) {
           <br />
           <label htmlFor='exercise'>Exercise: {' '}
             <select name="exercise" value={form.exercise} onChange={handleChange} required>
-              <option value="">Select</option>
+              <option value="None">None</option>
+              <option value="Incomplete">Incomplete</option>
               <option value="Simple and Sinister">Simple and Sinister</option>
               <option value="Sprints">Sprints</option>
               <option value="Climb">Climb</option>

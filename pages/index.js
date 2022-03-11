@@ -1,10 +1,16 @@
 import Head from 'next/head'
 import Link from 'next/link'
 import MetricsDate from '../components/date'
+import OverviewMetrics from '../components/overviewMetrics/overviewMetrics'
 import connectDB from '../lib/mongodb'
 import MetricsDB from '../models/DailyMetric.models'
 
 export default function Home({ allMetrics }) {
+
+  allMetrics.sort(function(a, b) {
+    return new Date(a.date) - new Date(b.date)
+  }).reverse()
+
   return (
     <div className="container">
       <Head>
@@ -23,13 +29,16 @@ export default function Home({ allMetrics }) {
         <Link href='/posts/addMetrics'>
           <a>Add Metrics</a>
         </Link>
-            {allMetrics.map((dMetrics) => (
-              <Link href={{pathname: "/posts/[id]", query: {id: dMetrics._id}}} as={`/posts/${dMetrics._id}`}>
-                <a>
-                  <MetricsDate dateString={dMetrics.date} />
-                </a>
-              </Link>
-            ))}
+        <br />
+          {allMetrics.map((dMetrics) => (
+            <Link href={{pathname: "/posts/[id]", query: {id: dMetrics._id}}} as={`/posts/${dMetrics._id}`}>
+              <a>
+                <MetricsDate dateString={dMetrics.date} />
+              </a>
+            </Link>
+          ))}
+          <br />
+        <OverviewMetrics allMetrics={allMetrics} />
       </main>
 
       <footer>

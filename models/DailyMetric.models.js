@@ -30,7 +30,7 @@ const dailyMetricSchema = new Schema(
             required: true,
         },
         deep_work: {
-            type: Number,
+            type: String,
             required: true,
         },
         freedom_active: {
@@ -38,7 +38,7 @@ const dailyMetricSchema = new Schema(
             required: true,
         },
         read: {
-            type: Number,
+            type: String,
             required: true,
         },
     },
