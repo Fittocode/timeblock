@@ -3,7 +3,9 @@ import Link from 'next/link'
 import MetricsDate from '../components/date'
 import OverviewMetrics from '../components/overviewMetrics/overviewMetrics'
 import connectDB from '../lib/mongodb'
-import MetricsDB from '../models/DailyMetric.models'
+import DailyMetric from '../models/DailyMetric.models'
+import mongoose from 'mongoose'
+const {Schema, model} = mongoose
 
 export default function Home({ allMetrics }) {
 
@@ -198,7 +200,7 @@ export async function getServerSideProps() {
   await connectDB()
 
   /* find all the data in our database */
-  const result = await MetricsDB.find({})
+  const result = await DailyMetric.find({})
 
   const allMetrics = result.map((doc) => {
     let daysMetrics = doc.toObject()

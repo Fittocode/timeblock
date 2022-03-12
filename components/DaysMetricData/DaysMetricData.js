@@ -1,8 +1,8 @@
 import React from 'react'
 import Link from 'next/link'
-import MetricsDate from '../../components/date'
+import MetricsDate from '../Date'
 
-export default function metricData({...metrics}) {
+export default function daysMetricData({...metrics}) {
 
     return (
         <>

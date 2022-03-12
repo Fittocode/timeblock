@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { useRouter } from 'next/router'
-import NewMetricForm from '../newMetricForm/newMetricForm'
+import AddMetricForm from '../AddMetricForm/AddMetricForm'
 
-export default function addMetricsForm({ formId }) {
+export default function metricsForm({ formId }) {
   const router = useRouter()
   const contentType = 'application/json'
 
@@ -152,7 +152,6 @@ export default function addMetricsForm({ formId }) {
           <button type="submit">Submit</button>
         </form>
         <br />
-          <NewMetricForm />
         <div>
           {Object.keys(errors).map((err, index) => (
             <li key={index}>{err}</li>

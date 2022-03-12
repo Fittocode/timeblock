@@ -1,8 +1,7 @@
 import Head from 'next/head'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-import DailyMetrics from '../../components/dailyMetrics/dailyMetrics'
-import { setDate } from 'date-fns'
+import DaysMetricData from '../../components/DaysMetricData/DaysMetricData'
 
 export default function DayMetrics() {
 
@@ -29,7 +28,7 @@ export default function DayMetrics() {
         <Head>
           <title></title>
         </Head>
-        <DailyMetrics {...metrics} />
+        <DaysMetricData {...metrics} />
       </>
     )
   }

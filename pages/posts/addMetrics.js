@@ -1,6 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
-import AddMetricsForm from '../../components/forms/addMetricsForm/addMetricsForm'
+import ParentForm from '../../components/Forms/ParentForm/ParentForm'
 
 export default function addMetrics() {
   
@@ -8,7 +8,7 @@ export default function addMetrics() {
       <>
         <div>Add Day's Metrics</div>
         <br />
-        <AddMetricsForm formId="add-metrics-form"/>
+        <ParentForm />
         <br />
         <Link href="/">
           <a>Home</a>
