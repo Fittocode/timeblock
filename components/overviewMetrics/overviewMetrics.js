@@ -20,7 +20,7 @@ export default function overviewMetrics({ allMetrics }) {
         totalDeepWorkHours += Number(entry.deep_work)
         totalReadMinutes += Number(entry.read)
         avgTranquility += Number(entry.tranquility)
-        if (entry.seizure) totalSeizures++
+        if (entry.seizure === 'true') totalSeizures++
     })
     
     const findRoundedTotal = (metric, converter, decimal) => {
@@ -80,7 +80,7 @@ export default function overviewMetrics({ allMetrics }) {
             <p>You complete a stoic meditation on {convertToPercentage(smCompletionPercent)}% of days</p>
             <p>You complete your exercise on {convertToPercentage(exerciseCompletionPercent)}% of days</p>
             <p>You keep Freedom active on {convertToPercentage(freedomActivePercent)}% of days</p>
-            <p>You abstain from junk food (chips, sweets, alcohol) on {convertToPercentage(junkFoodCompletionPercent)}% of days.</p>
+            <p>You abstain from junk food (chips, sweets) on {convertToPercentage(junkFoodCompletionPercent)}% of days.</p>
             <p>You've had {totalSeizures} seizure.</p>
         </>
     )

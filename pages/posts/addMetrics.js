@@ -1,6 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
-import AddMetricsForm from '../../components/addMetricsForm/addMetricsForm'
+import AddMetricsForm from '../../components/forms/addMetricsForm/addMetricsForm'
 
 export default function addMetrics() {
   
