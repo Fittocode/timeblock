@@ -50,7 +50,6 @@ export default function overviewMetrics({ allMetrics }) {
             if (entry[metric] !== value1 && entry[metric] !== value2) completionNo++
             if (entry[metric] !== undefined) possibleEntries++
         })
-        console.log(completionNo)
         return Math.round((completionNo / possibleEntries) * 100) / 100
     }
     
@@ -71,7 +70,7 @@ export default function overviewMetrics({ allMetrics }) {
 
     return (
         <>
-            <div>Metrics Overview</div>
+            {/* <div>Metrics Overview</div>
             <p>You rate your daily tranquility a {avgTranquility} out of 10 on average</p>
             <p>You have walked {totalWalkMiles} miles in total for an average of {avgDailyWalkMiles} miles per day</p>
             <p>You have completed {totalDeepWorkHours} hours of deep work in total for an average of {avgDailyDW} hours per day</p>
@@ -81,7 +80,7 @@ export default function overviewMetrics({ allMetrics }) {
             <p>You complete your exercise on {convertToPercentage(exerciseCompletionPercent)}% of days</p>
             <p>You keep Freedom active on {convertToPercentage(freedomActivePercent)}% of days</p>
             <p>You abstain from junk food (chips, sweets) on {convertToPercentage(junkFoodCompletionPercent)}% of days.</p>
-            <p>You've had {totalSeizures} seizure.</p>
+            <p>You've had {totalSeizures} seizure.</p> */}
         </>
     )
 }

@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import Link from 'next/link'
-import MetricsDate from '../components/date'
+import MetricsDate from '../components/Date'
 import OverviewMetrics from '../components/overviewMetrics/overviewMetrics'
 import connectDB from '../lib/mongodb'
 import DailyMetric from '../models/DailyMetric.models'

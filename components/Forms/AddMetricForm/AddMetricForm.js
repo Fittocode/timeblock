@@ -1,6 +1,4 @@
 import {useState} from 'react'
-import mongoose from 'mongoose'
-const {Schema, model} = mongoose
 import DailyMetric from '../../../models/DailyMetric.models'
 
 export default function addMetricForm({newMetricFormId}) {
@@ -8,6 +6,7 @@ export default function addMetricForm({newMetricFormId}) {
     const [form, setForm] = useState({
         name: '',
         type: '',
+        input: {type: '', single: '', multiple: {number_options: 'okay', options: []}},
         required: 'true',
         unique: 'false'
     })
@@ -17,25 +16,23 @@ export default function addMetricForm({newMetricFormId}) {
         const name = target.name
         const value = target.value
 
+        console.log(name)
+
         setForm({
             ...form,
             [name]: value
         })
+
+      console.log(form.input)
     }
 
     const handleSubmit = (e) => {
         e.preventDefault()
         const errs = formValidate()
         if (Object.keys(errs).length === 0) {
-            DailyMetric.add({[newMetric.name] : {
-                type: [newMetric.type],
-                required: [newMetric.required],
-                unique: [newMetric.unique],
-                }
-            })
-            mongoose.model('DailyMetric', DailyMetric)
+            
           } else {
-
+            console.log('error')
           }
       }
 
@@ -49,6 +46,8 @@ export default function addMetricForm({newMetricFormId}) {
         return err
       }
 
+      console.log(form.input)
+
     return (
         <>
             <div>Add metric</div>
@@ -57,13 +56,28 @@ export default function addMetricForm({newMetricFormId}) {
                     <input type="text" name="name" value={form.name} onChange={handleChange} />
                 </label>
                 <br />
-                <label htmlFor="type">Data Type: 
-                <select name="type" value={form.type} onChange={handleChange}>
-                        <option value="number">Quantitative</option>
-                        <option value="string">Non-Quantitative</option>
+                <label htmlFor="data_type">Data Type: 
+                <select name="data_type" value={form.type} onChange={handleChange}>
+                        <option value="number">Number</option>
+                        <option value="string">Text</option>
                         <option value="boolean">True/False</option>
                     </select>
                 </label>
+                <br />
+                <label htmlFor="input">Input Type: 
+                <select name="input" value={form.input.type} onChange={handleChange}>
+                        <option value="single">Single</option>
+                        <option value="multiple">Multiple</option>
+                    </select>
+                </label>
+                {(form.input.type === 'multiple') ? 
+                    <>
+                        <br />
+                        <label htmlFor="">Number of Options
+                            <input type="text" value={form.input.multiple.number_options}/>
+                        </label>
+                    </> : ''
+            }
                 <br />
                 <label htmlFor="required">Required: 
                     <select name="required" value={form.required} onChange={handleChange}>

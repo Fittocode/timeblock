@@ -1,6 +1,7 @@
 import connectDB from '../../lib/mongodb';
+import MetricsDB from '../../models/DailyMetric.models'
 
-export default async function handler(req, res, MetricsDB) {
+export default async function handler(req, res) {
   const { method } = req
   await connectDB()
 
@@ -24,17 +25,6 @@ export default async function handler(req, res, MetricsDB) {
         res.status(400).json({success: false})
       }
       break;
-    // case 'ADD': 
-    //   try {
-    //     const metrics = await MetricsDB.create(
-    //       req.body
-    //       ) /* create new model in database */
-    //     res.status(201).json({success: true, metrics: metrics})
-    //   } catch(error) {
-    //     console.log('nope')
-    //     res.status(400).json({success: false})
-    //   }
-    //   break;
     default:
       res.status(400).json({success: false})
       break

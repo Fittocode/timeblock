@@ -8,9 +8,16 @@ const dailyMetricSchema = new Schema(
             default: Date.now
         },
         metric: [{
-            name: 'String',
+            name: '',
             type: String,
-            required: 'String'
+            input_type: {
+                single: '', 
+                multiple: {
+                    number_options: '', options: []
+                }
+            },
+            required: 'false',
+            unique: 'false'
         }]
     },
 )
