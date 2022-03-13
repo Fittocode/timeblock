@@ -1,14 +1,27 @@
 import { useState } from 'react'
-import DailyMetric from '../../../models/DailyMetric.models'
 import AddMetricForm from '../AddMetricForm/AddMetricForm'
 import MetricsForm from '../MetricsForm/MetricsForm'
 
-export default function parentForm () {
+export default function parentForm ({ metricsArray }) {
+
+    const [allMetricsForm, setAllMetricsForm] = useState({
+      metrics: []
+    })
+   
+    const addMetric = (metricsArray, addMetricForm, setAllMetricsForm) => {
+      metricsArray.push(addMetricForm)
+      setAllMetricsForm({
+        metrics: metricsArray
+      })
+      return metricsArray
+    }
+    
+    console.log(allMetricsForm)
 
     return (
       <>
-        <MetricsForm formId="form-id" metricFormId="add-metrics-form" data={DailyMetric} />
-        <AddMetricForm addMetricFormId="new-metric-form" />
+        <MetricsForm formId="form-id" metricFormId="add-metrics-form" allMetricsForm={allMetricsForm}/>
+        <AddMetricForm addMetricFormId="new-metric-form" addMetric={addMetric} metricsArray={metricsArray} setAllMetricsForm={setAllMetricsForm}/>
       </>
     )
 }

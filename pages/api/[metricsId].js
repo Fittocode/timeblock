@@ -1,5 +1,5 @@
 import connectDB from '../../lib/mongodb';
-import MetricsDB from '../../models/DailyMetric.models'
+import MetricsDB from '../../models/Metric.models.js'
 
 export default async function handler(req, res) {
     const {

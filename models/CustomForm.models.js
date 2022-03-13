@@ -1,17 +1,13 @@
 import mongoose from 'mongoose'
 const {Schema, model} = mongoose
 
-const dailyMetricSchema = new Schema(
+const customFormSchema = new Schema(
     {
-        date: {
-            type: Date,
-            default: Date.now
-        },
         metric: [{
             name: '',
             type: String,
-            input_type: {
-                single: '', 
+            input: {
+                type: '', 
                 multiple: {
                     number_options: '', options: []
                 }
@@ -24,6 +20,6 @@ const dailyMetricSchema = new Schema(
 
 mongoose.models = {}
 
-const DailyMetric = model('DailyMetric', dailyMetricSchema)
+const CustomForm = model('CustomForm', customFormSchema)
 
-export default DailyMetric
+export default CustomForm

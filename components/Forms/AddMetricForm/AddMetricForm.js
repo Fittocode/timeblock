@@ -1,12 +1,12 @@
 import {useState} from 'react'
-import DailyMetric from '../../../models/DailyMetric.models'
+import CustomForm from '../../../models/CustomForm.models'
 
-export default function addMetricForm({newMetricFormId}) {
+export default function addMetricForm({newMetricFormId, metricsArray, addMetric, setAllMetricsForm}) {
 
-    const [form, setForm] = useState({
+    const [addMetricForm, setAddMetricForm] = useState({
         name: '',
-        type: '',
-        input: {type: '', single: '', multiple: {number_options: 'okay', options: []}},
+        type: 'Number',
+        input: {type: 'single', multiple: {number_options: '', options: []}},
         required: 'true',
         unique: 'false'
     })
@@ -16,48 +16,76 @@ export default function addMetricForm({newMetricFormId}) {
         const name = target.name
         const value = target.value
 
-        console.log(name)
+        // set state nested 1 level deep
+        if (name === 'input') {
+            setAddMetricForm(prevForm => ({
+                ...prevForm,
+                input: {
+                    ...prevForm.input, 
+                    type: value 
+                }
+            }))
+            // set state nested 2 levels deep
+        } else if (addMetricForm.input.type === 'multiple' && name === 'noOptions') {
+            setAddMetricForm(prevForm => ({
+                ...prevForm,
+                input: {
+                    ...prevForm.input,
+                    multiple: { 
+                        ...prevForm.multiple,
+                        number_options: value 
+                    }
+                }
+            }))
+        } else {
+            setAddMetricForm(prevForm => ({
+                ...prevForm,
+                [name]: value
+            }))
+        }
 
-        setForm({
-            ...form,
-            [name]: value
-        })
-
-      console.log(form.input)
     }
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        const errs = formValidate()
-        if (Object.keys(errs).length === 0) {
-            
-          } else {
-            console.log('error')
-          }
+        addMetric(metricsArray, addMetricForm, setAllMetricsForm)
+        // const errs = formValidate()
+        // if (Object.keys(errs).length === 0) {
+        //   } else {
+        //     console.log('error')
+        //   }
       }
 
       const formValidate = () => {
         let err = {}
 
-        if (!form.name) err.name = 'Name is required'
-        if (!form.type) err.type = 'Type is required'
-        if (!form.required) err.required = 'Required is required'
-        if (!form.unique) err.unique = 'Unqiue is required'
+        if (!addMetricForm.name) err.name = 'Name is required'
+        if (!addMetricForm.type) err.type = 'Type is required'
+        if (!addMetricForm.required) err.required = 'Required is required'
+        if (!addMetricForm.unique) err.unique = 'Unqiue is required'
         return err
       }
 
-      console.log(form.input)
+    function repeatInputs(number_options) {
+        let array = []
+        for (let i = 1; i <= Number(number_options); i++) {
+            array.push(i)
+        }
+        return array
+    }
+
+    const inputArray = repeatInputs(addMetricForm.input.multiple.number_options)
 
     return (
         <>
             <div>Add metric</div>
             <form id={newMetricFormId} onSubmit={handleSubmit}>
                 <label htmlFor="name">Name: 
-                    <input type="text" name="name" value={form.name} onChange={handleChange} />
+                    <input type="text" name="name" value={addMetricForm.name} onChange={handleChange} />
                 </label>
                 <br />
-                <label htmlFor="data_type">Data Type: 
-                <select name="data_type" value={form.type} onChange={handleChange}>
+                <label htmlFor="type">Data Type: 
+                <select name="type" value={addMetricForm.type} onChange={handleChange}>
                         <option value="number">Number</option>
                         <option value="string">Text</option>
                         <option value="boolean">True/False</option>
@@ -65,37 +93,48 @@ export default function addMetricForm({newMetricFormId}) {
                 </label>
                 <br />
                 <label htmlFor="input">Input Type: 
-                <select name="input" value={form.input.type} onChange={handleChange}>
+                <select name="input" value={addMetricForm.input.type} onChange={handleChange}>
                         <option value="single">Single</option>
                         <option value="multiple">Multiple</option>
                     </select>
                 </label>
-                {(form.input.type === 'multiple') ? 
+                {(addMetricForm.input.type === 'multiple') ? 
                     <>
                         <br />
-                        <label htmlFor="">Number of Options
-                            <input type="text" value={form.input.multiple.number_options}/>
+                        <label htmlFor="noOptions">Number of Options
+                            <input type="text" name="noOptions" value={addMetricForm.input.multiple.number_options} onChange={handleChange}/>
                         </label>
                     </> : ''
-            }
+                }
+                {(addMetricForm.input.multiple.number_options > 1 && addMetricForm.input.multiple.number_options <= 10) ? 
+                <>
+                    <ul>
+                        {inputArray.map((number) => {
+                            return <label htmlFor="optionInputs">
+                                <br />
+                                {`Option ${number}`} <input type="text" key={`option${number}`} name='optionInputs'/>
+                            </label>
+                            })
+                        }
+                    </ul>
+                </> : ''
+                }
                 <br />
                 <label htmlFor="required">Required: 
-                    <select name="required" value={form.required} onChange={handleChange}>
+                    <select name="required" value={addMetricForm.required} onChange={handleChange}>
                         <option value="true">Yes</option>
                         <option value="false">No</option>
                     </select>
                 </label>
                 <br />
                 <label htmlFor="unique">Unique: 
-                    <select name="unique" value={form.unique} onChange={handleChange}>
+                    <select name="unique" value={addMetricForm.unique} onChange={handleChange}>
                         <option value="true">Yes</option>
                         <option value="false">No</option>
                     </select>
                 </label>
                 <br />
                 <button type='submit'>Submit</button>
-                <p>if type === options, display form inputs for options (name and value for each option)</p>
-
             </form>
         </>
     )
