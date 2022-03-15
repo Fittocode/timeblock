@@ -41,9 +41,11 @@ export default function AddMetric({ addMetricForm }) {
     
     const handleSubmit = (e) => {
         e.preventDefault()
-        setAllMetrics(prevState => {
-            return [...prevState, newMetric] 
-        })
+        if (newMetric.name !== '' && newMetric.name !== undefined) {
+            setAllMetrics(prevState => {
+                return [...prevState, newMetric] 
+            })
+        }
         setNewMetric({options: []})
     }
 
