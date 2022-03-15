@@ -6,12 +6,9 @@ const customFormSchema = new Schema(
         metric: [{
             name: '',
             type: String,
-            input: {
-                type: '', 
-                multiple: {
-                    number_options: '', options: []
-                }
-            },
+            options: [{
+                name: ''
+            }],
             required: 'false',
             unique: 'false'
         }]

@@ -5,6 +5,7 @@ import OverviewMetrics from '../components/overviewMetrics/overviewMetrics'
 import connectDB from '../lib/mongodb'
 import MetricDB from '../models/Metric.models.js'
 import mongoose from 'mongoose'
+import AddMetric from '../components/AddMetric'
 const {Schema, model} = mongoose
 
 export default function Home({ allMetrics }) {
@@ -33,7 +34,7 @@ export default function Home({ allMetrics }) {
         </Link>
         <br />
           {allMetrics.map((dMetrics) => (
-            <Link href={{pathname: "/posts/[id]", query: {id: dMetrics._id}}} as={`/posts/${dMetrics._id}`}>
+            <Link key={dMetrics._id} href={{pathname: "/posts/[id]", query: {id: dMetrics._id}}} as={`/posts/${dMetrics._id}`}>
               <a>
                 <MetricsDate dateString={dMetrics.date} />
               </a>
@@ -41,6 +42,7 @@ export default function Home({ allMetrics }) {
           ))}
           <br />
         <OverviewMetrics allMetrics={allMetrics} />
+        <AddMetric animalFormId='animal-form-id' />
       </main>
 
       <footer>

@@ -7,19 +7,25 @@ export default function metricsForm({ formId, allMetricsForm }) {
 
   const [errors, setErrors] = useState()
 
-  const [form, setForm] = useState({
-    metrics: []
+  const schema = {} 
+  allMetricsForm.metrics.map((metric, index) => {
+    schema[metric.name] = ''
   })
 
-    const postMetrics = async (form) => {
+  const [createdForm, setCreatedForm] = useState(schema)
+  console.log(schema)
+
+    const postMetrics = async (createdForm) => {
+      console.log('test')
       try {
+        console.log('test')
         const res = await fetch('/api/metrics', {
           method: 'POST',
           headers: {
             Accept: contentType,
             'Content-Type': contentType,
           },
-          body: JSON.stringify(form)
+          body: JSON.stringify(createdForm)
         })
         if (!res.ok) {
           throw new Error(res.status)
@@ -34,14 +40,14 @@ export default function metricsForm({ formId, allMetricsForm }) {
       const target = e.target
       const value = target.value
       const name = target.name
-      setForm({
-        metrics: allMetricsForm
+      setCreatedForm({
+        [name]: value
       })
     }
 
     const handleSubmit = (e) => {
       e.preventDefault()
-      postMetrics(form)
+      postMetrics(createdForm)
     }
 
     // const formValidate = () => {
@@ -58,23 +64,25 @@ export default function metricsForm({ formId, allMetricsForm }) {
     //   return err
     // }
 
-    console.log(allMetricsForm)
+    console.log(allMetricsForm.metrics)
 
     return (
       <>
         <form id={formId} onSubmit={handleSubmit}>
-          {allMetricsForm.metrics.map((metric, index) => {
-            return <div>
-              {metric.name}{' '}
-              {(metric.input.type === 'single') ? 
-              <label htmlFor="input">
-                <input name="input" value={form.metrics[index]} onChange={handleChange} />
-              </label>
-           : '' }
-              </div>
-          })}
+          {(allMetricsForm.metrics.length > 0) ? 
+            allMetricsForm.metrics.map((metric, index) => {
+              return <div>
+                {metric.name}{' '}
+                {(metric.input.type === 'single') ? 
+                <label htmlFor={metric.name}>
+                  <input name={metric.name} onChange={handleChange} />
+                </label>
+            : '' }
+            {(allMetricsForm.metrics) ? <button>Submit</button> : ''}
+                </div>
+            }) : ''
+        }
         </form>
-        <button>Submit</button>
         <br />
         <div>
           {/* {Object.keys(errors).map((err, index) => (

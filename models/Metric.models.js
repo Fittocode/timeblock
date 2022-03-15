@@ -7,7 +7,7 @@ const metricSchema = new Schema(
             type: Date,
             default: Date.now
         },
-        metrics: [
+        metrics_data: [
             {type: mongoose.Schema.Types.ObjectId, ref: 'CustomForm'}
         ]
     }
