@@ -1,15 +1,12 @@
 import React from 'react'
 import Link from 'next/link'
-import ParentForm from '../../components/Forms/ParentForm/ParentForm'
+import AddMetric from '../../components/AddMetric'
 
 export default function addMetrics() {
-    let metricsArray = []
   
     return (
       <>
-        <div>Add Day's Metrics</div>
-        <br />
-        <ParentForm metricsArray={metricsArray} />
+        <AddMetric addMetricForm="add-metric-form" />
         <br />
         <Link href="/">
           <a>Home</a>

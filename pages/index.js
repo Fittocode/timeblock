@@ -5,7 +5,6 @@ import OverviewMetrics from '../components/overviewMetrics/overviewMetrics'
 import connectDB from '../lib/mongodb'
 import MetricDB from '../models/Metric.models.js'
 import mongoose from 'mongoose'
-import AddMetric from '../components/AddMetric'
 const {Schema, model} = mongoose
 
 export default function Home({ allMetrics }) {
@@ -42,7 +41,6 @@ export default function Home({ allMetrics }) {
           ))}
           <br />
         <OverviewMetrics allMetrics={allMetrics} />
-        <AddMetric addMetricForm="add-metric-form" />
       </main>
 
       <footer>

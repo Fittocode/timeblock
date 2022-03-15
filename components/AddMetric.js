@@ -52,7 +52,7 @@ export default function AddMetric({ addMetricForm }) {
 
     return (
         <>
-        <h4>Add Metric</h4>
+        <h2>Metrics</h2>
             {allMetrics.map((metric) => {
                 return <div key={metric.name}>
                             <p>{metric.name}: {(metric.options.length > 0) ? <select>
@@ -63,6 +63,7 @@ export default function AddMetric({ addMetricForm }) {
                             } {(metric.units) ? metric.units : ''}</p>
                         </div>
             })}
+            <h4>Add Metric</h4>
             <form id={addMetricForm} onSubmit={handleSubmit}>
                 <label>Name: {' '}
                     <input type="text" name="name" placeholder="Exercise" value={newMetric.name} onChange={handleChange} />
