@@ -1,7 +1,7 @@
 import {useState} from 'react'
 
 
-export default function AnimalsComponent({ animalFormId }) {
+export default function AddMetric({ addMetricForm }) {
 
     const [allMetrics, setAllMetrics] = useState([])
 
@@ -63,7 +63,7 @@ export default function AnimalsComponent({ animalFormId }) {
                             } {(metric.units) ? metric.units : ''}</p>
                         </div>
             })}
-            <form id={animalFormId} onSubmit={handleSubmit}>
+            <form id={addMetricForm} onSubmit={handleSubmit}>
                 <label>Name: {' '}
                     <input type="text" name="name" placeholder="Exercise" value={newMetric.name} onChange={handleChange} />
                 </label>

@@ -42,7 +42,7 @@ export default function Home({ allMetrics }) {
           ))}
           <br />
         <OverviewMetrics allMetrics={allMetrics} />
-        <AddMetric animalFormId='animal-form-id' />
+        <AddMetric addMetricForm="add-metric-form" />
       </main>
 
       <footer>
