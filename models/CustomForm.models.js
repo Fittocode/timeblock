@@ -3,16 +3,15 @@ const {Schema, model} = mongoose
 
 const customFormSchema = new Schema(
     {
-        metric: [{
-            name: '',
-            type: String,
-            options: [{
+        name: '',
+        type: String,
+        options: [{
                 name: ''
             }],
-            required: 'false',
-            unique: 'false'
-        }]
-    },
+        units: '',
+        required: 'false',
+        unique: 'false'
+    }
 )
 
 mongoose.models = {}
