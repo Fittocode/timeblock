@@ -9,6 +9,15 @@ export default function parentForm ({ }) {
 
   const [allMetrics, setAllMetrics] = useState([])
 
+  const [valueData, setValueData] = useState([])
+
+  const [metricsForm, setMetricsForm] = useState({
+    date: Date.now,
+    metrics: []
+  })
+
+  const valueArr = Object.values(valueData)
+
   const [newMetric, setNewMetric] = useState({
     name: '',
     options: [],
@@ -29,13 +38,28 @@ export default function parentForm ({ }) {
         })
         const json = await res.json()
         setAllMetrics(json.metrics)
+        json.metrics.map((metric) => {
+          setMetricsForm(prevState => ({
+              ...prevState,
+              metrics: [
+                  ...prevState.metrics,
+                  {
+                      name: metric.name,
+                      data_value: '',
+                  }
+              ]
+          }))
+          console.log(metricsForm)
+        })
+        console.log(json.metrics)
       } catch (error) {
         console.log(error.message)
       }
     }
     getData()
   }, [])
-
+  
+  // posts new metric to database
   const postMetric = async (newMetric) => {
       try {
           const res = await fetch('/api/metrics', {
@@ -50,22 +74,18 @@ export default function parentForm ({ }) {
           console.log(error.message)
       }
   }
-    
+  
+  // call function posting new metric to database, resets new metric values
   const handleMetricSubmit = (e) => {
     console.log('Metric Submit')
       e.preventDefault()
-      // if (newMetric.name !== '' && newMetric.name !== undefined) {
-      //     setAllMetrics(prevState => {
-      //         return [...prevState, newMetric] 
-      //     })
-      // }
       postMetric(newMetric)
       setNewMetric(prevState => ({...prevState, name: '', options: []}))
   }
 
   return (
     <>
-      <MetricsForm allMetrics={allMetrics} />
+      <MetricsForm allMetrics={allMetrics} setValueData={setValueData} valueData={valueData} valueArr={valueArr} setMetricsForm={setMetricsForm}/>
       <AddMetric addMetricForm="add-metric-form" newMetric={newMetric} setNewMetric={setNewMetric} handleSubmit={handleMetricSubmit}/>
     </>
   )

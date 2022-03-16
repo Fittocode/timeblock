@@ -1,15 +1,16 @@
 import Head from 'next/head'
 import Link from 'next/link'
-// import MetricsDate from '../components/Date'
-// import OverviewMetrics from '../components/overviewMetrics/overviewMetrics'
-// import connectDB from '../lib/mongodb'
-// import MetricDB from '../models/Metric.models.js'
+import MetricsDate from '../components/Date'
+import OverviewMetrics from '../components/overviewMetrics/overviewMetrics'
+import connectDB from '../lib/mongodb' 
+import userDataDB from '../models/UserMetrics.models'
+require('../models/Metric.models')
 
-export default function Home({ allMetrics }) {
+export default function Home({ entries }) {
 
-  // allMetrics.sort(function(a, b) {
-  //   return new Date(a.date) - new Date(b.date)
-  // }).reverse()
+  entries.sort(function(a, b) {
+    return new Date(a.date) - new Date(b.date)
+  }).reverse()
 
   return (
     <div className="container">
@@ -30,13 +31,13 @@ export default function Home({ allMetrics }) {
           <a>Add Metrics</a>
         </Link>
         <br />
-          {/* {allMetrics.map((dMetrics) => (
-            <Link key={dMetrics._id} href={{pathname: "/posts/[id]", query: {id: dMetrics._id}}} as={`/posts/${dMetrics._id}`}>
+          {entries.map((entry) => (
+            <Link key={entry._id} href={{pathname: "/posts/[id]", query: {id: entry._id}}} as={`/posts/${entry._id}`}>
               <a>
-                <MetricsDate dateString={dMetrics.date} />
+                <MetricsDate dateString={entry.date} />
               </a>
             </Link>
-          ))} */}
+          ))}
           <br />
         {/* <OverviewMetrics allMetrics={allMetrics} /> */}
       </main>
@@ -194,21 +195,24 @@ export default function Home({ allMetrics }) {
 }
 
 /* Retrieves metrics data from mongodb database */
-// export async function getServerSideProps() {
-//   await connectDB()
+export async function getServerSideProps() {
+  await connectDB()
 
-//   /* find all the data in our database */
-//   const result = await MetricDB.find({})
+  /* find all the data in our database */
+  const dbData = await userDataDB.find({}).populate('metrics')
 
-//   const allMetrics = result.map((doc) => {
-//     let daysMetrics = doc.toObject()
-//     function serializeObject() {
-//       for (let metric in daysMetrics) {
-//         daysMetrics[metric] = daysMetrics[metric].toString()
-//       }
-//       return daysMetrics
-//     }
-//     return serializeObject(daysMetrics)
-//   })
-//   return { props: { allMetrics: allMetrics } }
-// }
+  // console.log(dbData[0].metrics)
+
+  const entries = dbData.map((doc) => {
+    let objDoc = doc.toObject()
+    
+    function serializeObject() {
+      for (let metric in objDoc) {
+        objDoc[metric] = objDoc[metric].toString()
+      }
+      return objDoc
+    }
+    return serializeObject(objDoc)
+  })
+  return { props: { entries: entries } }
+}
