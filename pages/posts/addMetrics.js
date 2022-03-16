@@ -1,12 +1,12 @@
 import React from 'react'
 import Link from 'next/link'
-import AddMetric from '../../components/AddMetric'
+import ParentForm from '../../components/Forms/ParentForm/ParentForm'
 
 export default function addMetrics() {
   
     return (
       <>
-        <AddMetric addMetricForm="add-metric-form" />
+      <ParentForm />
         <br />
         <Link href="/">
           <a>Home</a>
