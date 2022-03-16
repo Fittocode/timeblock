@@ -21,7 +21,6 @@ export default function parentForm ({ metricsArray }) {
     return (
       <>
         <MetricsForm formId="form-id" metricFormId="add-metrics-form" allMetricsForm={allMetricsForm}/>
-        <AddMetricForm addMetricFormId="new-metric-form" addMetric={addMetric} metricsArray={metricsArray} setAllMetricsForm={setAllMetricsForm}/>
       </>
     )
 }

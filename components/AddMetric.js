@@ -19,7 +19,6 @@ export default function AddMetric({ addMetricForm }) {
 
     const handleChange = (e) => {
         const {name, value} = e.target
-        console.log(name)
         if (name === 'options') setMetricOption({...metricOption, name: value})
         else setNewMetric(prevState => ({...prevState, [name]: value }))
     }
@@ -34,8 +33,8 @@ export default function AddMetric({ addMetricForm }) {
     }
 
     const handleRemove = (e) => {
-        const name = e.target.name
         e.preventDefault()
+        const name = e.target.name
         setNewMetric(prevState => ({...prevState, options: newMetric.options.filter(option => option.name !== name)}))
     }
     
@@ -49,22 +48,23 @@ export default function AddMetric({ addMetricForm }) {
         setNewMetric({options: []})
     }
 
-    console.log(metricOption)
-    console.log(newMetric)
-
     return (
         <>
         <h2>Metrics</h2>
-            {allMetrics.map((metric) => {
-                return <div key={metric.name}>
-                            <p>{metric.name}: {(metric.options.length > 0) ? <select>
-                                {metric.options.map((option) => {
-                                    return <option key={option.name} value={option.name}>{option.name}</option>
-                                })}
-                            </select> : <input name="name"/>
-                            } {(metric.units) ? metric.units : ''}</p>
-                        </div>
-            })}
+            <form onSubmit={handleSubmit}>
+                {allMetrics.map((metric) => {
+                    return <div key={metric.name}>
+                                <p>{metric.name}: {(metric.options.length > 0) ? <select>
+                                    {metric.options.map((option) => {
+                                        return <option key={option.name} value={option.name}>{option.name}</option>
+                                    })}
+                                </select> : <input name="name"/>
+                                } {(metric.units) ? metric.units : ''} 
+                                </p>
+                            </div>
+                })}
+                <button type="submit">Submit</button>
+            </form>
             <h4>Add Metric</h4>
             <form id={addMetricForm} onSubmit={handleSubmit}>
                 <label>Name: {' '}

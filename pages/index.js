@@ -4,8 +4,6 @@ import MetricsDate from '../components/Date'
 import OverviewMetrics from '../components/overviewMetrics/overviewMetrics'
 import connectDB from '../lib/mongodb'
 import MetricDB from '../models/Metric.models.js'
-import mongoose from 'mongoose'
-const {Schema, model} = mongoose
 
 export default function Home({ allMetrics }) {
 
