@@ -1,15 +1,15 @@
 import Head from 'next/head'
 import Link from 'next/link'
-import MetricsDate from '../components/Date'
-import OverviewMetrics from '../components/overviewMetrics/overviewMetrics'
-import connectDB from '../lib/mongodb'
-import MetricDB from '../models/Metric.models.js'
+// import MetricsDate from '../components/Date'
+// import OverviewMetrics from '../components/overviewMetrics/overviewMetrics'
+// import connectDB from '../lib/mongodb'
+// import MetricDB from '../models/Metric.models.js'
 
 export default function Home({ allMetrics }) {
 
-  allMetrics.sort(function(a, b) {
-    return new Date(a.date) - new Date(b.date)
-  }).reverse()
+  // allMetrics.sort(function(a, b) {
+  //   return new Date(a.date) - new Date(b.date)
+  // }).reverse()
 
   return (
     <div className="container">
@@ -30,15 +30,15 @@ export default function Home({ allMetrics }) {
           <a>Add Metrics</a>
         </Link>
         <br />
-          {allMetrics.map((dMetrics) => (
+          {/* {allMetrics.map((dMetrics) => (
             <Link key={dMetrics._id} href={{pathname: "/posts/[id]", query: {id: dMetrics._id}}} as={`/posts/${dMetrics._id}`}>
               <a>
                 <MetricsDate dateString={dMetrics.date} />
               </a>
             </Link>
-          ))}
+          ))} */}
           <br />
-        <OverviewMetrics allMetrics={allMetrics} />
+        {/* <OverviewMetrics allMetrics={allMetrics} /> */}
       </main>
 
       <footer>
@@ -194,21 +194,21 @@ export default function Home({ allMetrics }) {
 }
 
 /* Retrieves metrics data from mongodb database */
-export async function getServerSideProps() {
-  await connectDB()
+// export async function getServerSideProps() {
+//   await connectDB()
 
-  /* find all the data in our database */
-  const result = await MetricDB.find({})
+//   /* find all the data in our database */
+//   const result = await MetricDB.find({})
 
-  const allMetrics = result.map((doc) => {
-    let daysMetrics = doc.toObject()
-    function serializeObject() {
-      for (let metric in daysMetrics) {
-        daysMetrics[metric] = daysMetrics[metric].toString()
-      }
-      return daysMetrics
-    }
-    return serializeObject(daysMetrics)
-  })
-  return { props: { allMetrics: allMetrics } }
-}
+//   const allMetrics = result.map((doc) => {
+//     let daysMetrics = doc.toObject()
+//     function serializeObject() {
+//       for (let metric in daysMetrics) {
+//         daysMetrics[metric] = daysMetrics[metric].toString()
+//       }
+//       return daysMetrics
+//     }
+//     return serializeObject(daysMetrics)
+//   })
+//   return { props: { allMetrics: allMetrics } }
+// }

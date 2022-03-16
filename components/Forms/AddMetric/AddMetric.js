@@ -68,8 +68,8 @@ export default function AddMetric({ addMetricForm, newMetric, setNewMetric, hand
             <br />
             <label htmlFor="unique">Unique: {' '}
                 <select name="unique" onChange={handleChange}>
-                    <option value="false">False</option>
-                    <option value="true">True</option>
+                    <option value={false}>False</option>
+                    <option value={true}>True</option>
                 </select>
             </label>
             <br />

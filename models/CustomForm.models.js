@@ -3,14 +3,13 @@ const {Schema, model} = mongoose
 
 const customFormSchema = new Schema(
     {
-        name: '',
-        type: String,
-        options: [{
-                name: ''
-            }],
-        units: '',
-        required: 'false',
-        unique: 'false'
+        date: {
+            type: Date,
+            default: Date.now
+        },
+        metrics_data: [
+            {type: mongoose.Schema.Types.ObjectId, ref: 'CustomForm'}
+        ]
     }
 )
 
