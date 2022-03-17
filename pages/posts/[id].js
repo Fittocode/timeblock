@@ -6,14 +6,18 @@ import DaysMetricData from '../../components/DaysMetricData/DaysMetricData'
 export default function DayMetrics() {
 
     const [data, setData] = useState(null)
+    const [units, setUnits] = useState()
     const [isLoading, setLoading] = useState(false)
     const router = useRouter()
 
     useEffect(async () => {
       setLoading(true)
-      const res = await fetch('../api/userData')
-      const data = await res.json()
+      const resA = await fetch('../api/userData')
+      const resB = await fetch('../api/metrics')
+      const data = await resA.json()
+      const units = await resB.json()
       await setData(data)
+      await setUnits(units)
       await setLoading(false)
     }, [])
 
@@ -32,7 +36,7 @@ export default function DayMetrics() {
         <Head>
           <title></title>
         </Head>
-        <DaysMetricData metrics={metrics}/>
+        <DaysMetricData metrics={metrics} units={units}/>
       </>
     )
   }

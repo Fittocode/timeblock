@@ -1,5 +1,5 @@
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useRouter } from 'next/router'
 
@@ -23,12 +23,13 @@ export default function metricsForm({ allMetrics }) {
                 },
                 body: JSON.stringify(userData)
             })
-            router('/')
+            router.push('/')
         } catch(error) {
             console.log(error.message)
         }
     }
 
+    // push data object properties into array of property objects
     const createDataArr = (formData) => {
         let dataArr = []
         for (let metric in formData) {
@@ -52,14 +53,10 @@ export default function metricsForm({ allMetrics }) {
             metrics: dataArr
         }))
     }
-    
-    console.log(userData)
 
-    // setTimeout(() => {
-    //     console.log(userData)
-    //     console.log('post')
-    //     postUserData(userData)
-    // }, 10000)
+    if (userData.metrics.length > 0) {
+        postUserData(userData)
+    }
 
 
     return (
@@ -83,7 +80,6 @@ export default function metricsForm({ allMetrics }) {
                 }
                 <button type="submit">Submit</button>
             </form>
-            <button onClick={() => postUserData(userData)}>Post</button>
       </>
     )
 }
