@@ -63,6 +63,7 @@ export default function parentForm ({ }) {
   return (
     <>
       <MetricsForm allMetrics={allMetrics}/>
+      <br />
       <AddMetric addMetricForm="add-metric-form" newMetric={newMetric} setNewMetric={setNewMetric} handleSubmit={handleMetricSubmit}/>
     </>
   )
