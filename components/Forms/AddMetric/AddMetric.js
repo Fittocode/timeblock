@@ -1,7 +1,9 @@
 import { useState } from 'react'
+import { useForm } from 'react-hook-form'
 
 export default function AddMetric({ addMetricForm, newMetric, setNewMetric, handleSubmit }) {
 
+    // const {register, handleSubmit} = useForm()
     const [addMetric, setAddMetric] = useState(false)
     const [metricOption, setMetricOption] = useState({
         name: ''
