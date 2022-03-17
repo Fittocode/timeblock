@@ -7,13 +7,7 @@ const userMetricsSchema = new Schema(
             type: Date,
             default: Date.now
         },
-        metrics: 
-            [
-                {
-                    name: {type: mongoose.Schema.Types.ObjectId, ref: 'Metric'}, 
-                    data_value: '', 
-                }
-            ]    
+        metrics: []    
     }
 )
 

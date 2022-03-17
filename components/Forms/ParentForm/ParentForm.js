@@ -9,15 +9,6 @@ export default function parentForm ({ }) {
 
   const [allMetrics, setAllMetrics] = useState([])
 
-  const [valueData, setValueData] = useState([])
-
-  const [metricsForm, setMetricsForm] = useState({
-    date: Date.now,
-    metrics: []
-  })
-
-  const valueArr = Object.values(valueData)
-
   const [newMetric, setNewMetric] = useState({
     name: '',
     options: [],
@@ -38,20 +29,6 @@ export default function parentForm ({ }) {
         })
         const json = await res.json()
         setAllMetrics(json.metrics)
-        json.metrics.map((metric) => {
-          setMetricsForm(prevState => ({
-              ...prevState,
-              metrics: [
-                  ...prevState.metrics,
-                  {
-                      name: metric.name,
-                      data_value: '',
-                  }
-              ]
-          }))
-          console.log(metricsForm)
-        })
-        console.log(json.metrics)
       } catch (error) {
         console.log(error.message)
       }
@@ -85,7 +62,7 @@ export default function parentForm ({ }) {
 
   return (
     <>
-      <MetricsForm allMetrics={allMetrics} setValueData={setValueData} valueData={valueData} valueArr={valueArr} setMetricsForm={setMetricsForm}/>
+      <MetricsForm allMetrics={allMetrics}/>
       <AddMetric addMetricForm="add-metric-form" newMetric={newMetric} setNewMetric={setNewMetric} handleSubmit={handleMetricSubmit}/>
     </>
   )

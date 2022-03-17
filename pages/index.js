@@ -11,7 +11,7 @@ export default function Home({ entries }) {
   entries.sort(function(a, b) {
     return new Date(a.date) - new Date(b.date)
   }).reverse()
-
+  
   return (
     <div className="container">
       <Head>

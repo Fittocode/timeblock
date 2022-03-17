@@ -1,12 +1,19 @@
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
 import { useRouter } from 'next/router'
 
-export default function metricsForm({ allMetrics, setValueData, valueData, valueArr, setMetricsForm }) {
+export default function metricsForm({ allMetrics }) {
     const router = useRouter()
+    const { register, handleSubmit } = useForm()
+    const [formData, setFormData] = useState('')
+    const [userData, setUserData] = useState({
+        date: '',
+        metrics: []
+    })
     const contentType = 'application/json'
   
-    const postUserData = async (metricsForm) => {
+    const postUserData = async (userData) => {
         try {
             const res = await fetch('/api/userData', {
                 method: 'POST',
@@ -14,55 +21,61 @@ export default function metricsForm({ allMetrics, setValueData, valueData, value
                     Accept: contentType,
                     'Content-Type': contentType
                 },
-                body: JSON.stringify(metricsForm)
+                body: JSON.stringify(userData)
             })
+            router('/')
         } catch(error) {
             console.log(error.message)
         }
     }
 
-    const handleChange = (e) => {
-        const {name, value} = e.target
-        setValueData(prevState => ({
+    const createDataArr = (formData) => {
+        let dataArr = []
+        for (let metric in formData) {
+            if (metric === 'Date') {
+                setUserData(prevState => ({
+                    ...prevState,
+                    date: formData[metric]
+                }))
+                continue
+            }
+            dataArr.push({[metric]: formData[metric]})
+        }
+        return dataArr
+    }
+    
+    const onSubmit = (formData) => {
+        setFormData(formData)
+        let dataArr = createDataArr(formData)
+        setUserData(prevState => ({
             ...prevState,
-            [name]: value
+            metrics: dataArr
         }))
     }
+    
+    console.log(userData)
 
-    const handleSubmit = (e) => {
-        e.preventDefault()
-        console.log(allMetrics)
-        allMetrics.map((metric, index) => {
-            console.log(valueArr[index])
-            setMetricsForm(prevState => ({
-                ...prevState,
-                metrics: [
-                    ...prevState.metrics,
-                    {
-                        name: metric.name,
-                        data_value: valueData[index],
-                    }
-                ]
-            }))
-            console.log(metricsForm)
-          })
-        postUserData(metricsForm)
-    }
+    // setTimeout(() => {
+    //     console.log(userData)
+    //     console.log('post')
+    //     postUserData(userData)
+    // }, 10000)
+
 
     return (
       <>
        <h2>Metrics</h2>
-            <form onSubmit={handleSubmit}>
-                {/* <label htmlFor="date">Date: {' '}
-                    <input type="date"/>
-                </label> */}
+            <form onSubmit={handleSubmit(onSubmit)}>
+                <label htmlFor="date">Date: {' '}
+                    <input type="date" {...register('Date')}/>
+                </label>
                 {allMetrics && allMetrics.map((metric) => {
                     return <div>
-                        <p>{metric.name} : {(metric.options.length > 0) ? <select name={metric.name} onChange={handleChange}>
+                        <p>{metric.name} : {(metric.options.length > 0) ? <select {...register(metric.name)} >
                             {metric.options.map((option) => {
                                 return <option key={option.name} value={option.name}>{option.name}</option>
                             })}
-                        </select> : <input name={metric.name} onChange={handleChange}/>
+                        </select> : <input {...register(metric.name)} />
                         } {(metric.units) ? metric.units : ''}{(metric.required) ? ' (Required)' : ''}
                         </p>
                     </div>
@@ -70,6 +83,7 @@ export default function metricsForm({ allMetrics, setValueData, valueData, value
                 }
                 <button type="submit">Submit</button>
             </form>
+            <button onClick={() => postUserData(userData)}>Post</button>
       </>
     )
 }
