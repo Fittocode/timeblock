@@ -8,6 +8,18 @@ require('../models/Metric.models')
 
 export default function Home({ entries }) {
 
+  // const deleteHandler = (index) => {
+  //   entries.splice(1, index)
+  // }
+
+  const cardColorPicker = (number) => {
+    if (number > 8) return 'card-color-excellent'
+    if (number <= 8 && number > 7) return 'card-color-good'
+    if (number <= 7 && number >= 5.5) return 'card-color-fair'
+    if (number < 5.5 && number >= 4) return 'card-color-poor'
+    else return 'card-color-awful'
+  }
+
   entries.sort(function(a, b) {
     return new Date(a.date) - new Date(b.date)
   }).reverse()
@@ -31,12 +43,18 @@ export default function Home({ entries }) {
           <a>Add Metrics</a>
         </Link>
         <br />
-          {entries.map((entry) => (
-            <Link key={entry._id} href={{pathname: "/posts/[id]", query: {id: entry._id}}} as={`/posts/${entry._id}`}>
-              <a>
-                <MetricsDate dateString={entry.date} />
-              </a>
-            </Link>
+          {entries.map((entry, index) => (
+            // 10-8.5, 8.4-7.1, 7-6, 5.9-4.5, 4.4-0 
+
+              <div className={`card ${cardColorPicker(entry.metrics[4].Tranquility)}`}>
+              <Link key={entry._id} href={{pathname: "/posts/[id]", query: {id: entry._id}}} as={`/posts/${entry._id}`}>
+                <a>
+                  <MetricsDate dateString={entry.date} /> 
+                </a>
+              </Link>
+              <br />
+              {/* <p>Tranquility: {entry.metrics[4].Tranquility}</p> */}
+            </div>
           ))}
           <br />
         {/* <OverviewMetrics allMetrics={allMetrics} /> */}
@@ -99,6 +117,11 @@ export default function Home({ entries }) {
           text-decoration: underline;
         }
 
+        .entryBox {
+          border: 1px solid black;
+          padding: .75rem;
+        }
+
         .title {
           margin: 0;
           line-height: 1.15;
@@ -135,23 +158,44 @@ export default function Home({ entries }) {
         }
 
         .card {
-          margin: 1rem;
+          margin: .1rem;
           flex-basis: 45%;
-          padding: 1.5rem;
+          background: white;
+          padding: .5rem;
+          width: 10rem;
+
           text-align: left;
           color: inherit;
           text-decoration: none;
-          border: 1px solid #eaeaea;
-          border-radius: 10px;
           transition: color 0.15s ease, border-color 0.15s ease;
         }
 
-        .card:hover,
+        .card-color-excellent {
+          background-color: rgba(0, 225, 134, 0.8)
+        }
+
+        .card-color-good {
+          background-color: rgba(195, 255, 100, 0.8)
+        }
+
+        .card-color-fair {
+          background-color: rgba(255, 235, 120, 0.8)
+        }
+
+        .card-color-poor {
+          background-color: rgba(255, 138, 72, 0.8)
+        }
+
+        .card-color-awful {
+          background-color: rgba(255, 104, 86, 0.8)
+        }
+
+        /* .card:hover,
         .card:focus,
         .card:active {
           color: #0070f3;
           border-color: #0070f3;
-        }
+        } */
 
         .card h3 {
           margin: 0 0 1rem 0;
@@ -160,7 +204,7 @@ export default function Home({ entries }) {
 
         .card p {
           margin: 0;
-          font-size: 1.25rem;
+          font-size: 1rem;
           line-height: 1.5;
         }
 
@@ -199,20 +243,8 @@ export async function getServerSideProps() {
   await connectDB()
 
   /* find all the data in our database */
-  const dbData = await userDataDB.find({})
-
-  // console.log(dbData[0].metrics)
-
-  const entries = dbData.map((doc) => {
-    let objDoc = doc.toObject()
-    
-    function serializeObject() {
-      for (let metric in objDoc) {
-        objDoc[metric] = objDoc[metric].toString()
-      }
-      return objDoc
-    }
-    return serializeObject(objDoc)
-  })
-  return { props: { entries: entries } }
+  const dbData = await fetch('http://localhost:3000/api/userData')
+  const data = await dbData.json()
+  
+  return { props: { entries: data.userData } }
 }

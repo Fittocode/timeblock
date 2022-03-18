@@ -66,8 +66,8 @@ export default function metricsForm({ allMetrics }) {
        <h2>Metrics</h2>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <label htmlFor="date">Date: {' '}
-                    <input type="text" {...register('date')} required />
-                </label> (MM-DD-YYY)
+                    <input type="text" {...register('date')} placeholder='MM-DD-YYYY' required />
+                </label>
                 {allMetrics && allMetrics.map((metric) => {
                     return <div>
                         <p>{metric.name} : {(metric.options.length > 0) ? <select {...register(metric.name)} >

@@ -25,7 +25,6 @@ export default function DayMetrics() {
     if (!data) return <p>No metrics data</p>
 
     const id = router.query.id
-    console.log(data.userData)
 
     let metrics = data.userData.find(x => x._id === id)
 
