@@ -199,7 +199,7 @@ export async function getServerSideProps() {
   await connectDB()
 
   /* find all the data in our database */
-  const dbData = await userDataDB.find({}).populate('metrics')
+  const dbData = await userDataDB.find({})
 
   // console.log(dbData[0].metrics)
 

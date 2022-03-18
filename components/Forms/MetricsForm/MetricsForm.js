@@ -33,7 +33,8 @@ export default function metricsForm({ allMetrics }) {
     const createDataArr = (formData) => {
         let dataArr = []
         for (let metric in formData) {
-            if (metric === 'Date') {
+            if (metric === 'date') {
+                console.log(formData[metric])
                 setUserData(prevState => ({
                     ...prevState,
                     date: formData[metric]
@@ -53,8 +54,9 @@ export default function metricsForm({ allMetrics }) {
             metrics: dataArr
         }))
     }
-
+    
     if (userData.metrics.length > 0) {
+        console.log(userData)
         postUserData(userData)
     }
 
@@ -64,16 +66,16 @@ export default function metricsForm({ allMetrics }) {
        <h2>Metrics</h2>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <label htmlFor="date">Date: {' '}
-                    <input type="date" {...register('Date')}/>
-                </label>
+                    <input type="text" {...register('date')} required />
+                </label> (MM-DD-YYY)
                 {allMetrics && allMetrics.map((metric) => {
                     return <div>
                         <p>{metric.name} : {(metric.options.length > 0) ? <select {...register(metric.name)} >
                             {metric.options.map((option) => {
                                 return <option key={option.name} value={option.name}>{option.name}</option>
                             })}
-                        </select> : <input {...register(metric.name)} />
-                        } {(metric.units) ? metric.units : ''}{(metric.required) ? ' (Required)' : ''}
+                        </select> : (metric.required === 'true') ? <input {...register(metric.name)} required /> : <input {...register(metric.name)} />
+                        } {(metric.units) ? metric.units : ''}
                         </p>
                     </div>
                     })
