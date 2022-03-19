@@ -1,9 +1,8 @@
 import Head from 'next/head'
 import Link from 'next/link'
-import MetricsDate from '../components/Date'
 import OverviewMetrics from '../components/overviewMetrics/overviewMetrics'
+import Calender from '../components/calender/Calender'
 import connectDB from '../lib/mongodb' 
-import userDataDB from '../models/UserMetrics.models'
 require('../models/Metric.models')
 
 export default function Home({ entries }) {
@@ -12,18 +11,6 @@ export default function Home({ entries }) {
   //   entries.splice(1, index)
   // }
 
-  const cardColorPicker = (number) => {
-    if (number > 8) return 'card-color-excellent'
-    if (number <= 8 && number > 7) return 'card-color-good'
-    if (number <= 7 && number >= 5.5) return 'card-color-fair'
-    if (number < 5.5 && number >= 4) return 'card-color-poor'
-    else return 'card-color-awful'
-  }
-
-  entries.sort(function(a, b) {
-    return new Date(a.date) - new Date(b.date)
-  }).reverse()
-  
   return (
     <div className="container">
       <Head>
@@ -43,19 +30,7 @@ export default function Home({ entries }) {
           <a>Add Metrics</a>
         </Link>
         <br />
-          {entries.map((entry, index) => (
-            // 10-8.5, 8.4-7.1, 7-6, 5.9-4.5, 4.4-0 
-
-              <div className={`card ${cardColorPicker(entry.metrics[4].Tranquility)}`}>
-              <Link key={entry._id} href={{pathname: "/posts/[id]", query: {id: entry._id}}} as={`/posts/${entry._id}`}>
-                <a>
-                  <MetricsDate dateString={entry.date} /> 
-                </a>
-              </Link>
-              <br />
-              {/* <p>Tranquility: {entry.metrics[4].Tranquility}</p> */}
-            </div>
-          ))}
+        <Calender entries={entries}/>
           <br />
         {/* <OverviewMetrics allMetrics={allMetrics} /> */}
       </main>
@@ -71,6 +46,10 @@ export default function Home({ entries }) {
           flex-direction: column;
           justify-content: center;
           align-items: center;
+        }
+
+        li {
+          display: inline-block;
         }
 
         main {
@@ -145,67 +124,6 @@ export default function Home({ entries }) {
           font-size: 1.1rem;
           font-family: Menlo, Monaco, Lucida Console, Liberation Mono,
             DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
-        }
-
-        .grid {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          flex-wrap: wrap;
-
-          max-width: 800px;
-          margin-top: 3rem;
-        }
-
-        .card {
-          margin: .1rem;
-          flex-basis: 45%;
-          background: white;
-          padding: .5rem;
-          width: 10rem;
-
-          text-align: left;
-          color: inherit;
-          text-decoration: none;
-          transition: color 0.15s ease, border-color 0.15s ease;
-        }
-
-        .card-color-excellent {
-          background-color: rgba(0, 225, 134, 0.8)
-        }
-
-        .card-color-good {
-          background-color: rgba(195, 255, 100, 0.8)
-        }
-
-        .card-color-fair {
-          background-color: rgba(255, 235, 120, 0.8)
-        }
-
-        .card-color-poor {
-          background-color: rgba(255, 138, 72, 0.8)
-        }
-
-        .card-color-awful {
-          background-color: rgba(255, 104, 86, 0.8)
-        }
-
-        /* .card:hover,
-        .card:focus,
-        .card:active {
-          color: #0070f3;
-          border-color: #0070f3;
-        } */
-
-        .card h3 {
-          margin: 0 0 1rem 0;
-          font-size: 1.5rem;
-        }
-
-        .card p {
-          margin: 0;
-          font-size: 1rem;
-          line-height: 1.5;
         }
 
         .logo {
