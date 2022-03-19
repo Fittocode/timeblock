@@ -10,16 +10,15 @@ export default function Calender({ entries }) {
     // get entries of previous month
     // sort previous month entries
 
-    
     const currentDate = new Date()
-    const currentYear = format(currentDate, 'yyyy')
-    const getNumMonth = (currentDate.getMonth())
     const weekdays = ['Sun', 'Mon', 'Tues', 'Wed', 'Thurs', 'Fri', 'Sat']
     const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
     const calendarTemplateArr = []
-
+    
     const [month, setMonth] = useState(months[currentDate.getMonth()])
     const [year, setYear] = useState(2022)
+    
+    const monthNum = (months.indexOf(month) + 1)
 
     entries.sort(function(a, b) {
         return new Date(a.date) - new Date(b.date)
@@ -52,7 +51,7 @@ export default function Calender({ entries }) {
 
     const createCalendarTemplate = (monthNum, month, year) => {
         const daysInMonth = new Date(year, monthNum, 0).getDate()
-        const daysInPreviousMonth = new Date(year, getNumMonth - 1, 0).getDate()
+        const daysInPreviousMonth = new Date(year, monthNum - 1, 0).getDate()
         const firstDayMonth = new Date(`${month} 1 ${year}`)
         const dayOfWeek = firstDayMonth.getDay()
         
@@ -71,8 +70,9 @@ export default function Calender({ entries }) {
             else calendarTemplateArr.push({month: monthNum + 1, day: i})
         }
     }
+    console.log(months.indexOf(month))
 
-    createCalendarTemplate(months.indexOf(month), month, year)
+    createCalendarTemplate(monthNum, month, year)
 
     const mapEntries = () => {
         
