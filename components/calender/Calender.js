@@ -5,32 +5,16 @@ import MetricsDate from '../Date'
 
 export default function Calender({ entries }) {
 
-    // get entries of current month
-    // sort current month entries, beginning to end
-    // get entries of previous month
-    // sort previous month entries
-
     const currentDate = new Date()
     const weekdays = ['Sun', 'Mon', 'Tues', 'Wed', 'Thurs', 'Fri', 'Sat']
     const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-    const calendarTemplateArr = []
+    let calendarTemplateArr = []
+    const calendarEntries = []
     
     const [month, setMonth] = useState(months[currentDate.getMonth()])
     const [year, setYear] = useState(2022)
-    
+
     const monthNum = (months.indexOf(month) + 1)
-
-    entries.sort(function(a, b) {
-        return new Date(a.date) - new Date(b.date)
-    })
-
-    let findMonthEntries = (month) => entries.filter(entry => {
-        const [eYear, eMonth, eDay] = entry.date.split('-')
-        if (eMonth === month) return entry
-    })
-
-    const currentMonthEntries = findMonthEntries('03')
-    const lastMonthEntries = findMonthEntries('02')
 
     // buttons to change month and year
     const changePrevMonth = () => {
@@ -49,6 +33,11 @@ export default function Calender({ entries }) {
         else setMonth(months[months.indexOf(month) + 1])
     }
 
+    const convertDate = (entryDate) => {
+        let date = new Date(entryDate)
+        return format(date, 'MM-dd-yyyy')
+    }
+
     const createCalendarTemplate = (monthNum, month, year) => {
         const daysInMonth = new Date(year, monthNum, 0).getDate()
         const daysInPreviousMonth = new Date(year, monthNum - 1, 0).getDate()
@@ -57,45 +46,57 @@ export default function Calender({ entries }) {
         
         // add entirety of current month to arr
         for (let i = 1; i <= daysInMonth; i++) {
-            calendarTemplateArr.push({month: months[monthNum - 1], day: i})
+            calendarTemplateArr.push({date: convertDate(`${monthNum}-${i}-${year}`)})
         }
         // then fill beginning of calendar with end of last month
         for (let i = daysInPreviousMonth; i > (daysInPreviousMonth - dayOfWeek); i--) {
-            calendarTemplateArr.unshift({month: months[monthNum - 2], day: i})
+            if (monthNum === 1) calendarTemplateArr.unshift({date: convertDate(`${12}-${i}-${year}`)})
+            else calendarTemplateArr.unshift({date: convertDate(`${monthNum - 1}-${i}-${year}`)})
         }
         // then fill end of calendar with beginning of next month
         const remainingSpaces = 42 - calendarTemplateArr.length
         for (let i = 1; i <= remainingSpaces; i++) {
-            if (monthNum === 12) calendarTemplateArr.push({month: months[0], day: i})
-            else calendarTemplateArr.push({month: monthNum + 1, day: i})
+            if (monthNum === 12) calendarTemplateArr.push({date: convertDate(`${1}-${i}-${year}`)})
+            else calendarTemplateArr.push({date: convertDate(`${monthNum + 1}-${i}-${year}`)})
         }
     }
-    console.log(months.indexOf(month))
-
     createCalendarTemplate(monthNum, month, year)
 
-    const mapEntries = () => {
-        
+    // get entries of current month
+    // sort current month entries, beginning to end
+    // get entries of previous month
+    // sort previous month entries
+    
+    entries.map((entry) => {
+        entry.date = new Date(entry.date)
+        entry.date = format(entry.date, 'MM-dd-yyyy')
+    })
+
+    // const fullArr = entries.concat(calendarTemplateArr)
+    
+    entries.sort(function(a, b) {
+        return new Date(a.date) - new Date(b.date)
+    })
+    
+    const mapEntriesToCalendar = (entries, calendarTemplateArr) => {
+        calendarTemplateArr.map((box, index) => {
+            // if (entries[index].date === box.date) {
+            //     box.name = 'Yes!'
+            // } else {
+            //     box.name = 'nope'
+            // }
+            entries.map((entry) => {
+                if (entry.date === box.date) {
+                    box.metrics = entry.metrics
+                    box._id = entry._id
+                }
+            })
+        })
+        return calendarTemplateArr
     }
 
-    
-    // const addPreviousMonthEntries = (previousMonthEntries, daysInMonth, dayOfWeek) => {
-    //     const reversedMonthEntries = previousMonthEntries.reverse()
-    
-    //     for (let i = 0; i < dayOfWeek; i++) {
-    //         currentMonthEntries.unshift(reversedMonthEntries[i])
-    //     }
-    //     const num = currentMonthEntries.length - 1
-    //     for (let i = num, j = num; i < 41; i++, j++) {
-    //         if (j === daysInMonth + 1) {
-    //             j = 1
-    //         }
-    //         currentMonthEntries.push({date: new Date(`${currentYear}-${currentMonth}-${j}`)})
-    //     }
-    //     return currentMonthEntries
-    // }
-
-    // const calenderArr = addPreviousMonthEntries(lastMonthEntries, daysInMonth, dayOfWeek)
+    mapEntriesToCalendar(entries, calendarTemplateArr)
+    console.log(calendarTemplateArr)
 
     const tranquilityExists = (entry) => {
         if (entry.hasOwnProperty('metrics')) return cardColorPicker(entry.metrics[4].Tranquility)
@@ -120,18 +121,15 @@ export default function Calender({ entries }) {
                 {weekdays.map((day) => {
                     return <li className="day">{day}</li>
                 })}
-            {calendarTemplateArr.map((entry) => {
-                return <li className="card">{entry.day}</li>
-            })}
-            {/* {calenderArr.map((entry) => (
-                <Link key={entry._id} href={{pathname: "/posts/[id]", query: {id: entry._id}}} as={`/posts/${entry._id}`}>
-                <a>
-                    <li className={`card ${tranquilityExists(entry)}`}>
-                        <MetricsDate dateString={entry.date} /> 
-                    </li>
-                </a>
-                </Link>
-            ))} */}
+                    {calendarTemplateArr.map((entry) => (
+                        <Link key={entry._id} href={{pathname: "/posts/[id]", query: {id: entry._id}}} as={`/posts/${entry._id}`}>
+                        <a>
+                            <li className={`card ${tranquilityExists(entry)}`}>
+                                {entry.day || <MetricsDate dateString={entry.date} /> }
+                            </li>
+                        </a>
+                        </Link>
+                    ))}
             <style jsx>{`
 
             .day {
@@ -152,7 +150,7 @@ export default function Calender({ entries }) {
 
             .calender-box {
             width: 702px;
-            height: 401px;
+            height: 402px;
             border: 1px solid black;
             }
 
