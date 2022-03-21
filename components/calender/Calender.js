@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { format} from 'date-fns'
+import MonthOverview from '../MonthOverview/MonthOverview'
 import MetricsDate from '../Date'
 
 export default function Calender({ entries }) {
@@ -8,8 +9,7 @@ export default function Calender({ entries }) {
     const currentDate = new Date()
     const weekdays = ['Sun', 'Mon', 'Tues', 'Wed', 'Thurs', 'Fri', 'Sat']
     const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-    let calendarTemplateArr = []
-    const calendarEntries = []
+    let calenderArr = []
     
     const [month, setMonth] = useState(months[currentDate.getMonth()])
     const [year, setYear] = useState(2022)
@@ -46,45 +46,34 @@ export default function Calender({ entries }) {
         
         // add entirety of current month to arr
         for (let i = 1; i <= daysInMonth; i++) {
-            calendarTemplateArr.push({date: convertDate(`${monthNum}-${i}-${year}`)})
+            calenderArr.push({date: convertDate(`${monthNum}-${i}-${year}`)})
         }
         // then fill beginning of calendar with end of last month
         for (let i = daysInPreviousMonth; i > (daysInPreviousMonth - dayOfWeek); i--) {
-            if (monthNum === 1) calendarTemplateArr.unshift({date: convertDate(`${12}-${i}-${year}`)})
-            else calendarTemplateArr.unshift({date: convertDate(`${monthNum - 1}-${i}-${year}`)})
+            if (monthNum === 1) calenderArr.unshift({date: convertDate(`${12}-${i}-${year}`)})
+            else calenderArr.unshift({date: convertDate(`${monthNum - 1}-${i}-${year}`)})
         }
         // then fill end of calendar with beginning of next month
-        const remainingSpaces = 42 - calendarTemplateArr.length
+        const remainingSpaces = 42 - calenderArr.length
         for (let i = 1; i <= remainingSpaces; i++) {
-            if (monthNum === 12) calendarTemplateArr.push({date: convertDate(`${1}-${i}-${year}`)})
-            else calendarTemplateArr.push({date: convertDate(`${monthNum + 1}-${i}-${year}`)})
+            if (monthNum === 12) calenderArr.push({date: convertDate(`${1}-${i}-${year}`)})
+            else calenderArr.push({date: convertDate(`${monthNum + 1}-${i}-${year}`)})
         }
     }
     createCalendarTemplate(monthNum, month, year)
-
-    // get entries of current month
-    // sort current month entries, beginning to end
-    // get entries of previous month
-    // sort previous month entries
     
+    // format dates to MM-dd-yyyy
     entries.map((entry) => {
         entry.date = new Date(entry.date)
         entry.date = format(entry.date, 'MM-dd-yyyy')
     })
-
-    // const fullArr = entries.concat(calendarTemplateArr)
     
     entries.sort(function(a, b) {
         return new Date(a.date) - new Date(b.date)
     })
     
-    const mapEntriesToCalendar = (entries, calendarTemplateArr) => {
-        calendarTemplateArr.map((box, index) => {
-            // if (entries[index].date === box.date) {
-            //     box.name = 'Yes!'
-            // } else {
-            //     box.name = 'nope'
-            // }
+    const mapEntriesToCalendarArr = (entries, calenderArr) => {
+        calenderArr.map((box) => {
             entries.map((entry) => {
                 if (entry.date === box.date) {
                     box.metrics = entry.metrics
@@ -92,11 +81,10 @@ export default function Calender({ entries }) {
                 }
             })
         })
-        return calendarTemplateArr
+        return calenderArr
     }
 
-    mapEntriesToCalendar(entries, calendarTemplateArr)
-    console.log(calendarTemplateArr)
+    mapEntriesToCalendarArr(entries, calenderArr)
 
     const tranquilityExists = (entry) => {
         if (entry.hasOwnProperty('metrics')) return cardColorPicker(entry.metrics[4].Tranquility)
@@ -113,6 +101,7 @@ export default function Calender({ entries }) {
     return (
         <div>
             <h2>{month} {year}</h2>
+            <MonthOverview currentMonth={month} currentYear={year} calenderArr={calenderArr} months={months}/>
             <button onClick={() => changePrevMonth()}>prev month</button>{' '}
             <button onClick={() => changeNextMonth()}>next month</button>
             <br />
@@ -121,7 +110,7 @@ export default function Calender({ entries }) {
                 {weekdays.map((day) => {
                     return <li className="day">{day}</li>
                 })}
-                    {calendarTemplateArr.map((entry) => (
+                    {calenderArr.map((entry) => (
                         <Link key={entry._id} href={{pathname: "/posts/[id]", query: {id: entry._id}}} as={`/posts/${entry._id}`}>
                         <a>
                             <li className={`card ${tranquilityExists(entry)}`}>
