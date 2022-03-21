@@ -27,30 +27,33 @@ export default function MonthOverview({calenderArr, currentMonth, months}) {
 
     let monthTotals = []
 
+    monthArr.sort(function(a, b) {
+        return a.metrics.length - b.metrics.length
+    })
+
     if (monthArr.length > 0) {
-        monthArr[0].metrics.map(() => {
+        monthArr[monthArr.length-1].metrics.map(() => {
             monthTotals.push(0)
         })
     }
 
     monthArr.map((entry) => {
         entry.metrics.map((metric, index) => {
+            console.log(metric)
             let value = Object.values(metric)[0]
             if (!isNaN(value)) monthTotals[index] += Number(value)
             else if (value !== undefined && value === 'True') monthTotals[index] += 1
         })
     })
 
-    console.log(monthTotals)
-
     return (
         <div>
             <p>This month...</p>
             {(monthArr.length > 0) ? 
-                monthArr[0].metrics.map((metric, index) => {
+                monthArr[monthArr.length-1].metrics.map((metric, index) => {
                     return <p>
                         {Object.keys(metric)[0]}: {
-                            (Object.values(metric)[1] === 'Minutes') ? 
+                            (Object.values(metric)[1] === 'Minutes' && Object.values(metric)[1] < 60) ? 
                                 `${findRoundedTotal(monthTotals[index], 60, 10)} Hours` : `${findRoundedTotal(monthTotals[index], 1, 10)} ${(metric.units) ? metric.units : ''}`
                             }
                         </p>

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 
-export default function AddMetric({ addMetricForm, newMetric, setNewMetric, handleSubmit, metricType, setMetricType }) {
+export default function AddMetric({ addMetricForm, newMetric, setNewMetric, handleSubmit }) {
 
     // const {register, handleSubmit} = useForm()
     const [addMetric, setAddMetric] = useState(false)
@@ -16,11 +16,7 @@ export default function AddMetric({ addMetricForm, newMetric, setNewMetric, hand
     const handleChange = (e) => {
         const {name, value} = e.target
         if (name === 'options') setMetricOption({...metricOption, name: value})
-        else if (name === 'input_type') {
-            setMetricType({name: value})
-        }
         else setNewMetric(prevState => ({...prevState, [name]: value }))
-
     }
     
     const handleAdd = (e) => {
@@ -66,15 +62,6 @@ export default function AddMetric({ addMetricForm, newMetric, setNewMetric, hand
                         </div>
                     : ''}
                 {' '}
-                <br />
-                <br />
-                <label htmlFor="input_type">Input Type:{' '}
-                    <select name="input_type" onChange={handleChange}>
-                        <option value="text">Text</option>
-                        <option value="number">Number</option>
-                        <option value="textarea">Long Form Text</option>
-                    </select>
-                </label> (Use text for true/false)
                 <br />
                 <br />
                 <label htmlFor="units">Unit of Measure: {' '}
