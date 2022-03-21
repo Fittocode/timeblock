@@ -22,7 +22,7 @@ export default function MonthOverview({calenderArr, currentMonth, months}) {
     }
 
     const findRoundedAvg = (metric, decimal) => {
-        return Math.round(((metric / allMetrics.length) + Number.EPSILON) * decimal) / decimal
+        return Math.round(((metric / monthArr.length) + Number.EPSILON) * decimal) / decimal
     }
 
     let monthTotals = []
@@ -42,9 +42,11 @@ export default function MonthOverview({calenderArr, currentMonth, months}) {
             console.log(metric)
             let value = Object.values(metric)[0]
             if (!isNaN(value)) monthTotals[index] += Number(value)
-            else if (value !== undefined && value === 'True') monthTotals[index] += 1
+            else if (value !== undefined && value !== 'False' && value !== 'No Data') monthTotals[index] += 1
         })
     })
+
+    console.log(monthArr)
 
     return (
         <div>
@@ -53,8 +55,10 @@ export default function MonthOverview({calenderArr, currentMonth, months}) {
                 monthArr[monthArr.length-1].metrics.map((metric, index) => {
                     return <p>
                         {Object.keys(metric)[0]}: {
-                            (Object.values(metric)[1] === 'Minutes' && Object.values(metric)[1] < 60) ? 
-                                `${findRoundedTotal(monthTotals[index], 60, 10)} Hours` : `${findRoundedTotal(monthTotals[index], 1, 10)} ${(metric.units) ? metric.units : ''}`
+                            (Object.values(metric)[1] === 'Minutes' && Object.values(metric)[0] < 60) ? 
+                                `${findRoundedTotal(monthTotals[index], 60, 10)} Hours` : 
+                                    `${(Object.keys(metric)[0] === 'Tranquility') ? 
+                                        `${findRoundedAvg(monthTotals[index], 10)} (Average)` : findRoundedTotal(monthTotals[index], 1, 10)} ${(metric.units) ? metric.units : ''}`
                             }
                         </p>
                 }) : ''
