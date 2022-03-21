@@ -51,6 +51,9 @@ export default function MonthOverview({calenderArr, currentMonth, months}) {
     return (
         <div>
             <p>This month...</p>
+            <button>Show total</button>{' '}
+            <button>Show average</button>{' '}
+            <button>Show percentage</button>
             {(monthArr.length > 0) ? 
                 monthArr[monthArr.length-1].metrics.map((metric, index) => {
                     return <p>
