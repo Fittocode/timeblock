@@ -3,6 +3,8 @@ import { format} from 'date-fns'
 import MetricsDate from '../Date'
 
 export default function MonthOverview({calenderArr, currentMonth, months}) {
+
+    console.log(calenderArr)
     
     const getCurrentMonthEntries = (calenderArr, month, months) => {
         let arr = []
@@ -14,7 +16,6 @@ export default function MonthOverview({calenderArr, currentMonth, months}) {
     }
 
     const monthArr = getCurrentMonthEntries(calenderArr, currentMonth, months)
-    console.log(monthArr)
 
     const findRoundedTotal = (metric, converter, decimal) => {
         return Math.round(((metric + Number.EPSILON) / converter) * decimal) / decimal
@@ -24,26 +25,37 @@ export default function MonthOverview({calenderArr, currentMonth, months}) {
         return Math.round(((metric / allMetrics.length) + Number.EPSILON) * decimal) / decimal
     }
 
-    let totalWalk = 0
-    let totalSM = 0
-    let totalMed = 0
+    let monthTotals = []
+
+    if (monthArr.length > 0) {
+        monthArr[0].metrics.map(() => {
+            monthTotals.push(0)
+        })
+    }
 
     monthArr.map((entry) => {
-        entry.metrics.map((metric) => {
-            // if (Object.keys())
-            if (metric['Walk']) totalWalk += Number(metric.Walk) 
-            if (metric['Stoic Meditation']) totalSM += 1
-            if (metric['Meditation']) totalMed += Number(metric.Meditation)
+        entry.metrics.map((metric, index) => {
+            let value = Object.values(metric)[0]
+            if (!isNaN(value)) monthTotals[index] += Number(value)
+            else if (value !== undefined && value === 'True') monthTotals[index] += 1
         })
     })
 
+    console.log(monthTotals)
+
     return (
         <div>
-            This month...
-                {monthArr[0].metrics.map((metric) => {
-                    console.log(Object.keys(metric))
-                    return <p>{Object.keys(metric)}: {findRoundedTotal(totalWalk, 1, 10)}</p>
-                })}
+            <p>This month...</p>
+            {(monthArr.length > 0) ? 
+                monthArr[0].metrics.map((metric, index) => {
+                    return <p>
+                        {Object.keys(metric)[0]}: {
+                            (Object.values(metric)[1] === 'Minutes') ? 
+                                `${findRoundedTotal(monthTotals[index], 60, 10)} Hours` : `${findRoundedTotal(monthTotals[index], 1, 10)} ${(metric.units) ? metric.units : ''}`
+                            }
+                        </p>
+                }) : ''
+            }
         </div>
     )
 }

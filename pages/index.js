@@ -7,10 +7,6 @@ require('../models/Metric.models')
 
 export default function Home({ entries }) {
 
-  // const deleteHandler = (index) => {
-  //   entries.splice(1, index)
-  // }
-
   return (
     <div className="container">
       <Head>

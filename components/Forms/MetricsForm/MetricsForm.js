@@ -6,7 +6,6 @@ import { useRouter } from 'next/router'
 export default function metricsForm({ allMetrics }) {
     const router = useRouter()
     const { register, handleSubmit } = useForm()
-    const [formData, setFormData] = useState('')
     const [userData, setUserData] = useState({
         date: '',
         metrics: []
@@ -29,26 +28,32 @@ export default function metricsForm({ allMetrics }) {
         }
     }
 
+    
     // push data object properties into array of property objects
-    const createDataArr = (formData) => {
-        let dataArr = []
+    const createDataArr = (formData, allMetrics) => {
+        let formDataArr = []
+        // loop through formData push to formDataArr
         for (let metric in formData) {
             if (metric === 'date') {
-                console.log(formData[metric])
                 setUserData(prevState => ({
                     ...prevState,
                     date: formData[metric]
                 }))
-                continue
+                continue;
             }
-            dataArr.push({[metric]: formData[metric]})
+            formDataArr.push({[metric]: formData[metric] })
+        }
+        // loop through length of allMetrics, push formData and allMetrics units to new arr
+        let dataArr = []
+        for (let i = 0; i < allMetrics.length; i++) {
+            dataArr.push({[Object.keys(formDataArr[i])]: Object.values(formDataArr[i])[0], units: allMetrics[i].units})
         }
         return dataArr
     }
     
     const onSubmit = (formData) => {
-        setFormData(formData)
-        let dataArr = createDataArr(formData)
+        let dataArr = createDataArr(formData, allMetrics)
+        console.log(dataArr)
         setUserData(prevState => ({
             ...prevState,
             metrics: dataArr

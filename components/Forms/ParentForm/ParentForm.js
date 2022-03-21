@@ -9,8 +9,11 @@ export default function parentForm ({ }) {
 
   const [allMetrics, setAllMetrics] = useState([])
 
+  const [metricType, setMetricType] = useState('')
+
   const [newMetric, setNewMetric] = useState({
     name: '',
+    type: (metricType === 'text') ? String : Number,
     options: [],
     units: '',
     required: false,
@@ -54,7 +57,6 @@ export default function parentForm ({ }) {
   
   // call function posting new metric to database, resets new metric values
   const handleMetricSubmit = (e) => {
-    console.log('Metric Submit')
       e.preventDefault()
       postMetric(newMetric)
       setNewMetric(prevState => ({...prevState, name: '', options: []}))
@@ -64,7 +66,7 @@ export default function parentForm ({ }) {
     <>
       <MetricsForm allMetrics={allMetrics}/>
       <br />
-      <AddMetric addMetricForm="add-metric-form" newMetric={newMetric} setNewMetric={setNewMetric} handleSubmit={handleMetricSubmit}/>
+      <AddMetric addMetricForm="add-metric-form" newMetric={newMetric} setNewMetric={setNewMetric} handleSubmit={handleMetricSubmit} metricType={metricType} setMetricType={setMetricType}/>
     </>
   )
 }

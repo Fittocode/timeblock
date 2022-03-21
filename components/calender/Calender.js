@@ -86,17 +86,19 @@ export default function Calender({ entries }) {
 
     mapEntriesToCalendarArr(entries, calenderArr)
 
-    const tranquilityExists = (entry) => {
-        if (entry.hasOwnProperty('metrics')) return cardColorPicker(entry.metrics[4].Tranquility)
-    }
+    console.log(entries)
 
-    const cardColorPicker = (number) => {
-        if (number > 8) return 'card-color-excellent'
-        if (number <= 8 && number > 7) return 'card-color-good'
-        if (number <= 7 && number >= 5.5) return 'card-color-fair'
-        if (number < 5.5 && number >= 4) return 'card-color-poor'
-        else return 'card-color-awful'
-      }
+    // const tranquilityExists = (entry) => {
+    //     if (entry.hasOwnProperty('metrics')) return cardColorPicker(entry.metrics[1].Tranquility)
+    // }
+
+    // const cardColorPicker = (number) => {
+    //     if (number > 8) return 'card-color-excellent'
+    //     if (number <= 8 && number > 7) return 'card-color-good'
+    //     if (number <= 7 && number >= 5.5) return 'card-color-fair'
+    //     if (number < 5.5 && number >= 4) return 'card-color-poor'
+    //     else return 'card-color-awful'
+    //   }
 
     return (
         <div>
@@ -113,7 +115,7 @@ export default function Calender({ entries }) {
                     {calenderArr.map((entry) => (
                         <Link key={entry._id} href={{pathname: "/posts/[id]", query: {id: entry._id}}} as={`/posts/${entry._id}`}>
                         <a>
-                            <li className={`card ${tranquilityExists(entry)}`}>
+                            <li className={`card `}>
                                 {entry.day || <MetricsDate dateString={entry.date} /> }
                             </li>
                         </a>
