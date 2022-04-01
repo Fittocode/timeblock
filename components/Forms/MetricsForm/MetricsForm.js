@@ -53,7 +53,6 @@ export default function metricsForm({ allMetrics }) {
     
     const onSubmit = (formData) => {
         let dataArr = createDataArr(formData, allMetrics)
-        console.log(dataArr)
         setUserData(prevState => ({
             ...prevState,
             metrics: dataArr

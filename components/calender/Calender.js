@@ -118,12 +118,12 @@ export default function Calender({ entries }) {
             <br />
             <div className="calender-box">
                 {weekdays.map((day) => {
-                    return <li className="day">{day}</li>
+                    return <li key={day} className="day">{day}</li>
                 })}
                     {calenderArr.map((entry) => (
-                        <Link key={entry._id} href={{pathname: "/posts/[id]", query: {id: entry._id}}} as={`/posts/${entry._id}`}>
+                        <Link href={{pathname: "/posts/[id]", query: {id: entry._id}}} as={`/posts/${entry._id}`}>
                         <a>
-                            <li className={`card ${tranquilityExists(entry.metrics)}`}>
+                            <li key={entry._id} className={`card ${tranquilityExists(entry.metrics)}`}>
                                 {entry.day || <MetricsDate dateString={entry.date} /> }
                             </li>
                         </a>
