@@ -1,8 +1,9 @@
 import Head from 'next/head'
 import Link from 'next/link'
 import OverviewMetrics from '../components/overviewMetrics/overviewMetrics'
-import Calender from '../components/calender/Calender'
+import Calender from '../components/Calender/Calender'
 import connectDB from '../lib/mongodb' 
+import SearchBar from '../components/SearchBar/SearchBar'
 require('../models/Metric.models')
 
 export default function Home({ entries }) {
@@ -25,6 +26,8 @@ export default function Home({ entries }) {
         <Link href='/posts/addMetrics'>
           <a>Add Metrics</a>
         </Link>
+        <br />
+        <SearchBar entries={entries} />
         <br />
         <Calender entries={entries}/>
           <br />
