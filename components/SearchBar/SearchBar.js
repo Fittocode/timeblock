@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import Calender from '../Calender/Calender'
 
 function SearchBar({entries}) {
 
@@ -48,9 +49,10 @@ function SearchBar({entries}) {
             </select>{' '}
             <input type="text" placeholder={selectedMetric} onChange={handleInputChange} />{' '}
         </form>
-        {filterEntries(entries, metricFilter).map((entry) => {
+        {/* {filterEntries(entries, metricFilter).map((entry) => {
             return <li key={entry.date}>{entry.date}</li>
-        })}
+        })} */}
+        <Calender entries={filterEntries(entries, metricFilter)} />
     </div>
   )
 }

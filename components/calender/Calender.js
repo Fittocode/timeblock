@@ -111,11 +111,9 @@ export default function Calender({ entries }) {
     return (
         <div>
             <h2>{month} {year}</h2>
-            <MonthOverview currentMonth={month} currentYear={year} calenderArr={calenderArr} months={months}/>
             <button onClick={() => changePrevMonth()}>prev month</button>{' '}
             <button onClick={() => changeNextMonth()}>next month</button>
-            <br />
-            <br />
+            <MonthOverview currentMonth={month} currentYear={year} calenderArr={calenderArr} months={months}/>
             <div className="calender-box">
                 {weekdays.map((day) => {
                     return <li key={day} className="day">{day}</li>

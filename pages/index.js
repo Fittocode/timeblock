@@ -17,7 +17,7 @@ export default function Home({ entries }) {
 
       <main>
         <h1 className="title">
-          Daily Metrics
+          Monthly Metrics
         </h1>
 
         <p className="description">
@@ -29,8 +29,6 @@ export default function Home({ entries }) {
         <br />
         <SearchBar entries={entries} />
         <br />
-        <Calender entries={entries}/>
-          <br />
         {/* <OverviewMetrics allMetrics={allMetrics} /> */}
       </main>
 
