@@ -11,7 +11,7 @@ export default function daysMetricData({metrics, units}) {
                 <h3><MetricsDate dateString={metrics.date} /></h3>
                 {metrics.metrics.map((metric, index) => {
                     return <div>
-                        <p key={metric.name}>{Object.keys(metric)}: {Object.values(metric)} {(Object.values(metric) == '') ? 'Null' : ((units.metrics[index].units) ? units.metrics[index].units : '')}</p>
+                        <p key={metric.name}>{Object.keys(metric)[0]}: {Object.values(metric)[0]} {(Object.values(metric) == '') ? 'Null' : ((units.metrics[index].units) ? units.metrics[index].units : '')}</p>
                     </div>
                 })}
             </div>
