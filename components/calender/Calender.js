@@ -100,6 +100,12 @@ export default function Calender({ entries }) {
         }
     }
 
+    const notCurrentMonth = (date, monthNum) => {
+        for (let i = 0; i < date.length; i++) {
+            if (date[1] !== monthNum.toString()) return 'not-in-month'
+        }
+    }
+
     const cardColorPicker = (number) => {
         if (number > 8) return 'card-color-excellent'
         if (number <= 8 && number > 7) return 'card-color-good'
@@ -124,7 +130,7 @@ export default function Calender({ entries }) {
                         {calenderArr.map((entry) => (
                             <Link href={{pathname: "/posts/[id]", query: {id: entry._id}}} as={`/posts/${entry._id}`}>
                             <a>
-                                <li key={entry._id} className={`card ${tranquilityExists(entry.metrics)}`}>
+                                <li key={entry._id} className={`card ${tranquilityExists(entry.metrics)} ${notCurrentMonth(entry.date, monthNum)}`}>
                                     {entry.day || <MetricsDate dateString={entry.date} /> }
                                 </li>
                             </a>
@@ -178,24 +184,28 @@ export default function Calender({ entries }) {
             border: .5px solid black
             }
 
+            .not-in-month {
+                opacity: 0.5;
+            }
+
             .card-color-excellent {
-            background-color: rgba(0, 225, 134, 0.8)
+            background-color: rgba(0, 225, 134)
             }
 
             .card-color-good {
-            background-color: rgba(195, 255, 100, 0.8)
+            background-color: rgba(195, 255, 100)
             }
 
             .card-color-fair {
-            background-color: rgba(255, 235, 120, 0.8)
+            background-color: rgba(255, 235, 120)
             }
 
             .card-color-poor {
-            background-color: rgba(255, 138, 72, 0.8)
+            background-color: rgba(255, 138, 72)
             }
 
             .card-color-awful {
-            background-color: rgba(255, 104, 86, 0.8)
+            background-color: rgba(255, 104, 86)
             }
 
             .card h3 {

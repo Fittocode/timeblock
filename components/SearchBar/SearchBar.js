@@ -68,8 +68,9 @@ const convertToLowerCase = (value) => {
 // filter entries based on metric input
 const filterEntries = (entries, metricState) => {
     let filteredEntries = entries.filter((entry) => entry.metrics.some(metric => {
-        if (metricState.condition === 'at least') return convertToLowerCase(metric[metricState.name]) >= convertToLowerCase(metricState.value)
-        if (metricState.condition === 'less than') return convertToLowerCase(metric[metricState.name]) < convertToLowerCase(metricState.value)
+        // consider checkbox conditions for number values
+        if (metricState.condition === 'at least' && !isNaN(metricState.value)) return convertToLowerCase(metric[metricState.name]) >= convertToLowerCase(metricState.value)
+        if (metricState.condition === 'less than' && !isNaN(metricState.value)) return convertToLowerCase(metric[metricState.name]) < convertToLowerCase(metricState.value)
         else return convertToLowerCase(metric[metricState.name]) === convertToLowerCase(metricState.value)
     }))
     if (!metricState.value) return entries
