@@ -29,7 +29,6 @@ export default function Home({ entries }) {
         <br />
         <SearchBar entries={entries} />
         <br />
-        {/* <OverviewMetrics allMetrics={allMetrics} /> */}
       </main>
 
       <footer>
@@ -41,8 +40,6 @@ export default function Home({ entries }) {
           padding: 0 0.5rem;
           display: flex;
           flex-direction: column;
-          justify-content: center;
-          align-items: center;
         }
 
         li {
@@ -50,7 +47,7 @@ export default function Home({ entries }) {
         }
 
         main {
-          padding: 5rem 0;
+          padding: 4rem 0;
           flex: 1;
           display: flex;
           flex-direction: column;

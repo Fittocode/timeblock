@@ -113,21 +113,35 @@ export default function Calender({ entries }) {
             <h2>{month} {year}</h2>
             <button onClick={() => changePrevMonth()}>prev month</button>{' '}
             <button onClick={() => changeNextMonth()}>next month</button>
-            <MonthOverview currentMonth={month} currentYear={year} calenderArr={calenderArr} months={months}/>
-            <div className="calender-box">
-                {weekdays.map((day) => {
-                    return <li key={day} className="day">{day}</li>
-                })}
-                    {calenderArr.map((entry) => (
-                        <Link href={{pathname: "/posts/[id]", query: {id: entry._id}}} as={`/posts/${entry._id}`}>
-                        <a>
-                            <li key={entry._id} className={`card ${tranquilityExists(entry.metrics)}`}>
-                                {entry.day || <MetricsDate dateString={entry.date} /> }
-                            </li>
-                        </a>
-                        </Link>
-                    ))}
-            <style jsx>{`
+            <div className="month-container">
+                <div className="month-overview-box">
+                    <MonthOverview currentMonth={month} currentYear={year} calenderArr={calenderArr} months={months}/>
+                </div>
+                <div className="calender-box">
+                    {weekdays.map((day) => {
+                        return <li key={day} className="day">{day}</li>
+                    })}
+                        {calenderArr.map((entry) => (
+                            <Link href={{pathname: "/posts/[id]", query: {id: entry._id}}} as={`/posts/${entry._id}`}>
+                            <a>
+                                <li key={entry._id} className={`card ${tranquilityExists(entry.metrics)}`}>
+                                    {entry.day || <MetricsDate dateString={entry.date} /> }
+                                </li>
+                            </a>
+                            </Link>
+                        ))}
+                </div>
+            </div>
+        <style jsx>{`
+            .month-container {
+                display: flex;
+                flex-direction: row;
+            }
+
+            .month-overview-box {
+                min-width: 13.3rem;
+                margin-right: 1rem;
+            }
 
             .day {
                 padding: 2px;
@@ -137,7 +151,7 @@ export default function Calender({ entries }) {
             }
 
             li {
-            display: inline-block;
+                display: inline-block;
             }
 
             a {
@@ -194,9 +208,7 @@ export default function Calender({ entries }) {
             font-size: 1rem;
             line-height: 1.5;
             }
-
-        `}</style>
+            `}</style>
         </div>
-    </div>
     )
 }

@@ -19,7 +19,7 @@ export default function MonthOverview({calenderArr, currentMonth, months}) {
                             (Object.values(metric)[1] === 'Minutes' && Object.values(metric)[0] < 60) ? 
                                 `${findRoundedTotal(monthTotals[index], 60, 10)} Hours` : 
                                     `${(Object.keys(metric)[0] === 'Tranquility') ? 
-                                        `${findRoundedAvg(monthTotals[index], monthArr, 10)} (Average)` : findRoundedTotal(monthTotals[index], 1, 10)} ${(metric.units) ? metric.units : ''}`
+                                        `${findRoundedAvg(monthTotals[index], monthArr, 10)} (Average)` : findRoundedTotal(monthTotals[index], 1, 100)} ${(metric.units) ? metric.units : ''}`
                             }
                         </p>
                 }) : ''
