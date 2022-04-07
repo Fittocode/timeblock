@@ -13,6 +13,7 @@ export default function Calender({ entries }) {
     
     const [month, setMonth] = useState(months[currentDate.getMonth()])
     const [year, setYear] = useState(2022)
+    const [hover, setHover] = useState(false)
 
     const monthNum = (months.indexOf(month) + 1)
 
@@ -86,7 +87,7 @@ export default function Calender({ entries }) {
 
     mapEntriesToCalendarArr(entries, calenderArr)
     
-    const tranquilityExists = (metrics) => {
+    const colorBasedOnTranquility = (metrics) => {
         let value = 0
         if (metrics) {
             metrics.map((metric) => {
@@ -114,6 +115,14 @@ export default function Calender({ entries }) {
         else return 'card-color-awful'
       }
 
+    const toggleHover = (index) => {
+        setHover(index)
+    }
+
+    const highlightEntry = (index) => {
+        if (hover === index) return 'hoverHighlight'
+    }
+
     return (
         <div>
             <h2>{month} {year}</h2>
@@ -127,10 +136,15 @@ export default function Calender({ entries }) {
                     {weekdays.map((day) => {
                         return <li key={day} className="day">{day}</li>
                     })}
-                        {calenderArr.map((entry) => (
+                        {calenderArr.map((entry, i) => (
                             <Link href={{pathname: "/posts/[id]", query: {id: entry._id}}} as={`/posts/${entry._id}`}>
                             <a>
-                                <li key={entry._id} className={`card ${tranquilityExists(entry.metrics)} ${notCurrentMonth(entry.date, monthNum)}`}>
+                                <li 
+                                    key={entry._id} 
+                                    className={`card ${colorBasedOnTranquility(entry.metrics)} ${notCurrentMonth(entry.date, monthNum)} ${highlightEntry(i)}`} 
+                                    onMouseEnter={() => toggleHover(i)} 
+                                    onMouseLeave={toggleHover} 
+                                >
                                     {entry.day || <MetricsDate dateString={entry.date} /> }
                                 </li>
                             </a>
@@ -185,27 +199,33 @@ export default function Calender({ entries }) {
             }
 
             .not-in-month {
-                opacity: 0.5;
+                opacity: 0.7;
+                filter: brightness(60%)
             }
 
             .card-color-excellent {
-            background-color: rgba(0, 225, 134)
+            background-color: rgb(0, 225, 134)
             }
 
             .card-color-good {
-            background-color: rgba(195, 255, 100)
+            background-color: rgb(195, 255, 100)
             }
 
             .card-color-fair {
-            background-color: rgba(255, 235, 120)
+            background-color: rgb(255, 235, 120)
             }
 
             .card-color-poor {
-            background-color: rgba(255, 138, 72)
+            background-color: rgb(255, 138, 72)
             }
 
             .card-color-awful {
-            background-color: rgba(255, 104, 86)
+            background-color: rgb(255, 104, 86)
+            }
+
+            .hoverHighlight {
+                opacity: 0.8;
+                filter: brightness(100%)
             }
 
             .card h3 {
