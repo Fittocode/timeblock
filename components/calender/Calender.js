@@ -108,10 +108,10 @@ export default function Calender({ entries, metricFilter }) {
     }
 
     const cardColorPicker = (number) => {
-        if (number > 8) return 'card-color-excellent'
-        if (number <= 8 && number > 7) return 'card-color-good'
+        if (number >= 8.5) return 'card-color-excellent'
+        if (number < 8.5 && number > 7) return 'card-color-good'
         if (number <= 7 && number >= 5.5) return 'card-color-fair'
-        if (number < 5.5 && number >= 4) return 'card-color-poor'
+        if (number < 5.5 && number > 4) return 'card-color-poor'
         else return 'card-color-awful'
       }
 
@@ -169,7 +169,7 @@ export default function Calender({ entries, metricFilter }) {
             }
 
             .month-overview-box {
-                min-width: 13.3rem;
+                min-width: 15rem;
                 margin-right: 1rem;
             }
 

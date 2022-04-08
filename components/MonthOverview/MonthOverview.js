@@ -9,8 +9,6 @@ export default function MonthOverview({calenderArr, currentMonth, months, metric
 
     calculateMonthTotals(monthArr, monthTotals)
 
-    console.log(metricFilter.condition)
-
     return (
         <div className='month-overview-container'>
             {constructText(metricFilter)}
@@ -29,7 +27,7 @@ export default function MonthOverview({calenderArr, currentMonth, months, metric
 }
 
 const constructText = (metricFilter) => {
-    let text = (metricFilter.value) ? <p>On a typical day this month when the value of <strong>{metricFilter.name}</strong> is {(metricFilter.condition) ? metricFilter.condition : ''}<strong>{metricFilter.value}{(!isNaN(metricFilter.value)) ? ` ${metricFilter.units}` : ''}</strong>, your other metrics average...</p> : <p>This month...</p>
+    let text = (metricFilter.value) ? <p>On a typical day this month when the value of <strong>{metricFilter.name}</strong> is {(!isNaN(metricFilter.value)) ? (metricFilter.condition) ? `${metricFilter.condition} ` : '' : ''}<strong>{metricFilter.value}{(!isNaN(metricFilter.value)) ? ` ${metricFilter.units}` : ''}</strong>, your other metrics average...</p> : <p>This month...</p>
     return <div>{text}</div>
 }
 

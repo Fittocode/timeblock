@@ -23,10 +23,15 @@ function SearchBar({entries}) {
     }
 
     const handleInputChange = (e, key) => {
-        if (metricFilter.condition === 'at least' || metricFilter.condition === 'less than') {
-            setMetricFilter(prevState => ({...prevState, [key]: ''}))
-        } else {
-            setMetricFilter(prevState => ({...prevState, [key]: e.target.value}))
+        setMetricFilter(prevState => ({...prevState, [key]: e.target.value}))
+
+        if (e.target.value === 'at least') {
+            if (metricFilter.condition === 'at least') setMetricFilter(prevState => ({...prevState, condition: ''}))
+            else setMetricFilter(prevState => ({...prevState, condition: 'at least'}))
+        }
+        if (e.target.value === 'less than') {
+            if (metricFilter.condition === 'less than') setMetricFilter(prevState => ({...prevState, condition: ''}))
+            else setMetricFilter(prevState => ({...prevState, condition: 'less than'}))
         }
     }
 
@@ -43,9 +48,9 @@ function SearchBar({entries}) {
                 })}
             </select>{' '}
             <input type="text" placeholder={metricFilter.units} onChange={(e) => handleInputChange(e, 'value')} />{' '}
-            <input type="checkbox" id="at-least" name="at least" value="at least" onChange={(e) => handleInputChange(e, 'condition')} />
+            <input type="checkbox" id="at-least" name="at least" value="at least" checked={metricFilter.condition === 'at least'} onChange={(e) => handleInputChange(e, 'condition')} />
             <label for="at-least">at least</label>{' '}
-            <input type="checkbox" id="less-than" name="less than" value="less than" onChange={(e) => handleInputChange(e, 'condition')} />
+            <input type="checkbox" id="less-than" name="less than" value="less than" checked={metricFilter.condition === 'less than'} onChange={(e) => handleInputChange(e, 'condition')} />
             <label for="less-than">less than</label>
         </form>
         <Calender entries={filterEntries(entries, metricFilter)} metricFilter={metricFilter}/>
