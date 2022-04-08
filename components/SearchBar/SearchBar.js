@@ -3,7 +3,7 @@ import Calender from '../Calender/Calender'
 
 function SearchBar({entries}) {
 
-    const [metricFilter, setMetricFilter] = useState({name: '', value: '', units: '', condition: ''})
+    const [metricFilter, setMetricFilter] = useState({name: '', value: '', units: '', condition: 'at least'})
 
     // for input placeholder 
     const mapUnitToMetricName = (eventValue) => {

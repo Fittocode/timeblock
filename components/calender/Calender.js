@@ -132,7 +132,7 @@ export default function Calender({ entries, metricFilter }) {
             <button onClick={() => changeNextMonth()}>next month</button>
             <div className="month-container">
                 <div className="month-overview-box">
-                    <MonthOverview currentMonth={month} currentYear={year} calenderArr={calenderArr} months={months} metricFilter={metricFilter}/>
+                    <MonthOverview currentMonth={month} currentYear={year} calenderArr={calenderArr} months={months} metricFilter={metricFilter} entries={entries}/>
                 </div>
                 <div className="calender-box">
                     {weekdays.map((day) => {
@@ -169,7 +169,7 @@ export default function Calender({ entries, metricFilter }) {
             }
 
             .month-overview-box {
-                min-width: 15rem;
+                min-width: 19rem;
                 margin-right: 1rem;
             }
 

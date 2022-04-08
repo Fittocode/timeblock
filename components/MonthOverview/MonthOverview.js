@@ -1,23 +1,33 @@
+import { useState } from 'react'
 
-export default function MonthOverview({calenderArr, currentMonth, months, metricFilter}) {
+export default function MonthOverview({calenderArr, currentMonth, months, metricFilter, entries}) {
 
-    let monthTotals = []
+    let currentMonthTotals = []
+    let lastMonthTotals = []
     
-    const monthArr = getCurrentMonthEntries(calenderArr, currentMonth, months)
+    // get current month entries
+    const currentMonthEntries = getMonthEntries(calenderArr, 0, currentMonth, months)
+    // get previous month entries
+    const prevMonthEntries = getMonthEntries(entries, 1, currentMonth, months)
 
-    sortMonthArr(monthArr)
+    sortMonthArr(currentMonthEntries)
 
-    calculateMonthTotals(monthArr, monthTotals)
+    // calculate current month metrics
+    calculateMonthTotals(currentMonthEntries, currentMonthTotals)
+    // caculate previous month entries
+    calculateMonthTotals(prevMonthEntries, lastMonthTotals)
+
+    const arrows = compareMonthTotals(currentMonthTotals, lastMonthTotals, currentMonthEntries, prevMonthEntries)
 
     return (
         <div className='month-overview-container'>
-            {constructText(metricFilter)}
-            {(metricFilter.value) ? constructMetricsOverview(monthArr, monthTotals, findRoundedAvg, 'Minutes', monthArr, 60) : constructMetricsOverview(monthArr, monthTotals, findRoundedTotal, 'Hours', 1, 60)}
+            {renderIntro(metricFilter)}
+            {(metricFilter.value) ? renderMetricsOverview(currentMonthEntries, currentMonthTotals, findRoundedAvg, currentMonthEntries, arrows) : renderMetricsOverview(currentMonthEntries, currentMonthTotals, findRoundedTotal, 1, arrows)}
 
             <style jsx>{`
 
             .month-overview-container {
-                max-width: 15rem;
+                min-width: 19rem;
             }
 
             `}</style>
@@ -26,39 +36,49 @@ export default function MonthOverview({calenderArr, currentMonth, months, metric
     )
 }
 
-const constructText = (metricFilter) => {
+// functions
+
+const compareMonthTotals = (currentMonthTotals, lastMonthTotals, currentMonthEntries, prevMonthEntries) => {
+    let arr = []
+    const arrow = (arrowColor, arrowDir, i) => {
+        return <span style={{color: arrowColor}}>{arrowDir} ({findRoundedAvg(currentMonthTotals[i], currentMonthEntries, 10)})</span>
+    }
+
+    for (let i = 0; i < currentMonthTotals.length; i++) {
+        if ((currentMonthTotals[i] / currentMonthEntries.length) > (lastMonthTotals[i] / prevMonthEntries.length)) {
+            arr.push(arrow('rgb(0, 195, 117)', '⬆', i))
+        } else {
+            arr.push(arrow('rgb(237, 31, 9)', '⬇', i))
+        }
+    }
+    return arr
+}
+
+const renderIntro = (metricFilter) => {
     let text = (metricFilter.value) ? <p>On a typical day this month when the value of <strong>{metricFilter.name}</strong> is {(!isNaN(metricFilter.value)) ? (metricFilter.condition) ? `${metricFilter.condition} ` : '' : ''}<strong>{metricFilter.value}{(!isNaN(metricFilter.value)) ? ` ${metricFilter.units}` : ''}</strong>, your other metrics average...</p> : <p>This month...</p>
     return <div>{text}</div>
 }
 
-const constructMetricsOverview = (monthArr, monthTotals, roundedFigures, unit, divider, timeDivider) => {
+const renderMetricsOverview = (monthArr, monthTotals, roundedFigures, divider, arrows) => {
     // to make sure it includes most recent metrics
     let mostRecentEntry = monthArr[monthArr.length-1]
 
     if (monthArr.length > 0) { 
         return mostRecentEntry.metrics.map((metric, index) => {
             let metricName = Object.keys(metric)[0]
-            let metricValue = Object.values(metric)[0]
-            let metricUnit = Object.values(metric)[1]
             if (metricName) {
                 if (metricName === 'Tranquility') {
-                    return <p key={metric.date}> {metricName}: {findRoundedAvg(monthTotals[index], monthArr, 10)} Average</p>
-                } else return <p key={metric.date}> {metricName}: {roundedFigures(monthTotals[index], divider, 100)} {metric.units}</p>
+                    return <p key={metric.date}> {metricName}: {findRoundedAvg(monthTotals[index], monthArr, 10)} Average {arrows[index]}</p>
+                } else return <p key={metric.date}> {metricName}: {roundedFigures(monthTotals[index], divider, 100)} {metric.units} {arrows[index]}</p>
             }
             if (metric.units) return metric.units
         })
     }
 }
 
-// return <p key={metric.date}>
-//     {metricName}: {
-//         (metricUnit === 'Minutes' && metricValue < 60) ? 
-//             `${roundedFigures(monthTotals[index], timeDivider, 10)} ${unit}` : 
-//                 `${(metricName === 'Tranquility') ? 
-//                     `${findRoundedAvg(monthTotals[index], monthArr, 10)} (Average)` : roundedFigures(monthTotals[index], divider, 100)} ${(metric.units) ? metric.units : ''}`
-//         }
-//     </p>
-// })
+const roundNum = (num) => {
+    return Math.round((num + Number.EPSILON) * 100) / 100
+}
 
 const findRoundedTotal = (metric, converter, decimal) => {
     return Math.round(((metric + Number.EPSILON) / converter) * decimal) / decimal
@@ -74,11 +94,11 @@ const sortMonthArr = (monthArr) => {
     })
 }
 
-const getCurrentMonthEntries = (calenderArr, currentMonth, months) => {
+const getMonthEntries = (entries, minusValue, currentMonth, months) => {
     let arr = []
-    calenderArr.map((entry) => {
+    entries.map((entry) => {
         let date = new Date(entry.date)
-        if (date.getMonth() === (months.indexOf(currentMonth)) && entry.metrics) arr.push(entry)
+        if (date.getMonth() === (months.indexOf(currentMonth) - minusValue) && entry.metrics) arr.push(entry)
     })
     return arr
 }

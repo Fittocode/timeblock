@@ -17,7 +17,7 @@ export default function Home({ entries }) {
 
       <main>
         <h1 className="title">
-          Monthly Metrics
+          Timeblock Metrics
         </h1>
 
         <p className="description">
