@@ -1,5 +1,5 @@
 
-export default function MonthOverview({calenderArr, currentMonth, months}) {
+export default function MonthOverview({calenderArr, currentMonth, months, metricFilter}) {
 
     let monthTotals = []
     
@@ -9,24 +9,58 @@ export default function MonthOverview({calenderArr, currentMonth, months}) {
 
     calculateMonthTotals(monthArr, monthTotals)
 
+    console.log(metricFilter.condition)
+
     return (
-        <div>
-            <p>This month...</p>
-            {(monthArr.length > 0) ? 
-                monthArr[monthArr.length-1].metrics.map((metric, index) => {
-                    return <p key={metric.date}>
-                        {Object.keys(metric)[0]}: {
-                            (Object.values(metric)[1] === 'Minutes' && Object.values(metric)[0] < 60) ? 
-                                `${findRoundedTotal(monthTotals[index], 60, 10)} Hours` : 
-                                    `${(Object.keys(metric)[0] === 'Tranquility') ? 
-                                        `${findRoundedAvg(monthTotals[index], monthArr, 10)} (Average)` : findRoundedTotal(monthTotals[index], 1, 100)} ${(metric.units) ? metric.units : ''}`
-                            }
-                        </p>
-                }) : ''
+        <div className='month-overview-container'>
+            {constructText(metricFilter)}
+            {(metricFilter.value) ? constructMetricsOverview(monthArr, monthTotals, findRoundedAvg, 'Minutes', monthArr, 60) : constructMetricsOverview(monthArr, monthTotals, findRoundedTotal, 'Hours', 1, 60)}
+
+            <style jsx>{`
+
+            .month-overview-container {
+                max-width: 15rem;
             }
+
+            `}</style>
         </div>
+        
     )
 }
+
+const constructText = (metricFilter) => {
+    let text = (metricFilter.value) ? <p>On a typical day this month when the value of <strong>{metricFilter.name}</strong> is {(metricFilter.condition) ? metricFilter.condition : ''}<strong>{metricFilter.value}{(!isNaN(metricFilter.value)) ? ` ${metricFilter.units}` : ''}</strong>, your other metrics average...</p> : <p>This month...</p>
+    return <div>{text}</div>
+}
+
+const constructMetricsOverview = (monthArr, monthTotals, roundedFigures, unit, divider, timeDivider) => {
+    // to make sure it includes most recent metrics
+    let mostRecentEntry = monthArr[monthArr.length-1]
+
+    if (monthArr.length > 0) { 
+        return mostRecentEntry.metrics.map((metric, index) => {
+            let metricName = Object.keys(metric)[0]
+            let metricValue = Object.values(metric)[0]
+            let metricUnit = Object.values(metric)[1]
+            if (metricName) {
+                if (metricName === 'Tranquility') {
+                    return <p key={metric.date}> {metricName}: {findRoundedAvg(monthTotals[index], monthArr, 10)} Average</p>
+                } else return <p key={metric.date}> {metricName}: {roundedFigures(monthTotals[index], divider, 100)} {metric.units}</p>
+            }
+            if (metric.units) return metric.units
+        })
+    }
+}
+
+// return <p key={metric.date}>
+//     {metricName}: {
+//         (metricUnit === 'Minutes' && metricValue < 60) ? 
+//             `${roundedFigures(monthTotals[index], timeDivider, 10)} ${unit}` : 
+//                 `${(metricName === 'Tranquility') ? 
+//                     `${findRoundedAvg(monthTotals[index], monthArr, 10)} (Average)` : roundedFigures(monthTotals[index], divider, 100)} ${(metric.units) ? metric.units : ''}`
+//         }
+//     </p>
+// })
 
 const findRoundedTotal = (metric, converter, decimal) => {
     return Math.round(((metric + Number.EPSILON) / converter) * decimal) / decimal

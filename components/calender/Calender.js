@@ -4,7 +4,7 @@ import { format} from 'date-fns'
 import MonthOverview from '../MonthOverview/MonthOverview'
 import MetricsDate from '../Date'
 
-export default function Calender({ entries }) {
+export default function Calender({ entries, metricFilter }) {
 
     const currentDate = new Date()
     const weekdays = ['Sun', 'Mon', 'Tues', 'Wed', 'Thurs', 'Fri', 'Sat']
@@ -119,8 +119,10 @@ export default function Calender({ entries }) {
         setHover(index)
     }
 
-    const highlightEntry = (index) => {
-        if (hover === index) return 'hoverHighlight'
+    const highlightEntry = (index, notCurrentMonth, date, month) => {
+        let notInMonth = notCurrentMonth(date, month)
+        if (hover === index && !notInMonth) return 'hoverCurrentMonth'
+        else if (hover === index) return 'hoverOtherMonth'
     }
 
     return (
@@ -130,25 +132,33 @@ export default function Calender({ entries }) {
             <button onClick={() => changeNextMonth()}>next month</button>
             <div className="month-container">
                 <div className="month-overview-box">
-                    <MonthOverview currentMonth={month} currentYear={year} calenderArr={calenderArr} months={months}/>
+                    <MonthOverview currentMonth={month} currentYear={year} calenderArr={calenderArr} months={months} metricFilter={metricFilter}/>
                 </div>
                 <div className="calender-box">
                     {weekdays.map((day) => {
                         return <li key={day} className="day">{day}</li>
                     })}
                         {calenderArr.map((entry, i) => (
+                            (entry._id !== undefined) ?
                             <Link href={{pathname: "/posts/[id]", query: {id: entry._id}}} as={`/posts/${entry._id}`}>
                             <a>
                                 <li 
                                     key={entry._id} 
-                                    className={`card ${colorBasedOnTranquility(entry.metrics)} ${notCurrentMonth(entry.date, monthNum)} ${highlightEntry(i)}`} 
+                                    className={`card ${colorBasedOnTranquility(entry.metrics)} ${notCurrentMonth(entry.date, monthNum)} ${highlightEntry(i, notCurrentMonth, entry.date, monthNum)}`} 
                                     onMouseEnter={() => toggleHover(i)} 
                                     onMouseLeave={toggleHover} 
                                 >
                                     {entry.day || <MetricsDate dateString={entry.date} /> }
                                 </li>
                             </a>
-                            </Link>
+                            </Link> : <li 
+                                    key={entry._id} 
+                                    className={`card ${colorBasedOnTranquility(entry.metrics)} ${notCurrentMonth(entry.date, monthNum)} ${highlightEntry(i, notCurrentMonth, entry.date, monthNum)}`} 
+                                    onMouseEnter={() => toggleHover(i)} 
+                                    onMouseLeave={toggleHover} 
+                                >
+                                    {entry.day || <MetricsDate dateString={entry.date} /> }
+                                </li>
                         ))}
                 </div>
             </div>
@@ -223,9 +233,14 @@ export default function Calender({ entries }) {
             background-color: rgb(255, 104, 86)
             }
 
-            .hoverHighlight {
+            .hoverCurrentMonth {
                 opacity: 0.8;
                 filter: brightness(100%)
+            }
+
+            .hoverOtherMonth {
+                opacity: 0.8;
+                filter: brightness(70%)
             }
 
             .card h3 {
