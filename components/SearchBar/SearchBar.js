@@ -69,9 +69,13 @@ const convertToLowerCase = (value) => {
 const filterEntries = (entries, metricState) => {
     let filteredEntries = entries.filter((entry) => entry.metrics.some(metric => {
         // consider checkbox conditions for number values
-        if (metricState.condition === 'at least' && !isNaN(metricState.value)) return convertToLowerCase(metric[metricState.name]) >= convertToLowerCase(metricState.value)
-        if (metricState.condition === 'less than' && !isNaN(metricState.value)) return convertToLowerCase(metric[metricState.name]) < convertToLowerCase(metricState.value)
-        else return convertToLowerCase(metric[metricState.name]) === convertToLowerCase(metricState.value)
+        let metricValue = convertToLowerCase(metric[metricState.name])
+        let inputValue = convertToLowerCase(metricState.value)
+        for (let i = 0; i < metricState.value.length; i++) {
+            if (metricState.condition === 'at least' && !isNaN(inputValue)) return metricValue >= inputValue
+            if (metricState.condition === 'less than' && !isNaN(inputValue)) return metricValue < inputValue
+            if (metricValue !== undefined && metricValue[i] === inputValue[i]) return metricValue.indexOf(inputValue) !== -1
+        }
     }))
     if (!metricState.value) return entries
     else return filteredEntries
