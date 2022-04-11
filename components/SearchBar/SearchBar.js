@@ -1,17 +1,19 @@
 import React, { useState } from 'react'
 import Calender from '../Calender/Calender'
 
-function SearchBar({entries}) {
+function SearchBar({entries, metrics}) {
 
     const [metricFilter, setMetricFilter] = useState({name: '', value: '', units: '', condition: 'at least'})
 
     // for input placeholder 
     const mapUnitToMetricName = (eventValue) => {
-        let metrics = entries[0].metrics
-        for (let i = 0; i < metrics.length; i++) {
-            if (Object.keys(metrics[i])[0] === eventValue) {
-                setMetricFilter({...metricFilter, units: metrics[i].units})
-                return Object.keys(metrics[i])[0]
+        if (entries.length > 0) {
+            let metrics = entries[0].metrics
+            for (let i = 0; i < metrics.length; i++) {
+                if (Object.keys(metrics[i])[0] === eventValue) {
+                    setMetricFilter({...metricFilter, units: metrics[i].units})
+                    return Object.keys(metrics[i])[0]
+                }
             }
         }
     }
@@ -35,17 +37,16 @@ function SearchBar({entries}) {
         }
     }
 
-
   return (
     <div>
         <form>
-            <label htmlFor="" />Find Days by Metric: {' '}
+            <label />Find Days by Metric: {' '}
             <select name="metrics" onChange={handleSelectChange}>
                 <option value=''></option>
-                {entries[0].metrics.map(metric => {
-                    let metricName = Object.keys(metric)[0]
+                {(metrics) ? metrics.map(metric => {
+                    let metricName = metric.name
                     return <option key={metricName} value={metricName}>{metricName}</option>
-                })}
+                }) : ''}
             </select>{' '}
             <input type="text" placeholder={metricFilter.units} onChange={(e) => handleInputChange(e, 'value')} />{' '}
             <input type="checkbox" id="at-least" name="at least" value="at least" checked={metricFilter.condition === 'at least'} onChange={(e) => handleInputChange(e, 'condition')} />

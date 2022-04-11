@@ -14,7 +14,7 @@ export default function metricsForm({ allMetrics }) {
   
     const postUserData = async (userData) => {
         try {
-            const res = await fetch('/api/userData', {
+            const res = await fetch('/api/userEntries', {
                 method: 'POST',
                 headers: {
                     Accept: contentType,

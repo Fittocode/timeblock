@@ -4,7 +4,9 @@ import connectDB from '../lib/mongodb'
 import SearchBar from '../components/SearchBar/SearchBar'
 require('../models/Metric.models')
 
-export default function Home({ entries }) {
+export default function Home({ entries, metrics }) {
+
+  console.log(metrics)
 
   return (
     <div className="container">
@@ -19,13 +21,13 @@ export default function Home({ entries }) {
         </h1>
 
         <p className="description">
-          Track and Display your Metrics Over Time
+          Track and Display Daily Metrics Over Time
         </p>
         <Link href='/posts/addMetrics'>
           <a>Add Metrics</a>
         </Link>
         <br />
-        <SearchBar entries={entries} />
+        <SearchBar entries={entries} metrics={metrics}/>
         <br />
       </main>
 
@@ -153,8 +155,10 @@ export async function getServerSideProps() {
   await connectDB()
 
   /* find all the data in our database */
-  const dbData = await fetch('http://localhost:3000/api/userEntries')
-  const data = await dbData.json()
+  const entriesData = await fetch('http://localhost:3000/api/userEntries')
+  const metricData = await fetch('http://localhost:3000/api/metrics')
+  const data1 = await entriesData.json()
+  const data2 = await metricData.json()
   
-  return { props: { entries: data.userEntries } }
+  return { props: { entries: data1.userEntries, metrics: data2.metrics } }
 }

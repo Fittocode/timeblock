@@ -12,7 +12,7 @@ export default function DayMetrics() {
 
     useEffect(async () => {
       setLoading(true)
-      const resA = await fetch('../api/userData')
+      const resA = await fetch('../api/userEntries')
       const resB = await fetch('../api/metrics')
       const data = await resA.json()
       const units = await resB.json()
@@ -26,7 +26,7 @@ export default function DayMetrics() {
 
     const id = router.query.id
 
-    let metrics = data.userData.find(x => x._id === id)
+    let metrics = data.userEntries.find(x => x._id === id)
 
     console.log(metrics)
 

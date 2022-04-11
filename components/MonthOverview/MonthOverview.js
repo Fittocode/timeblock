@@ -49,8 +49,10 @@ const compareMonthTotals = (currentMonthTotals, lastMonthTotals, currentMonthEnt
             arr.push(arrow('rgb(0, 195, 117)', '⬆', i))
         } else if ((currentMonthTotals[i] / currentMonthEntries.length) == (lastMonthTotals[i] / prevMonthEntries.length)) {
             arr.push(arrow('rgb(0, 0, 0)', '=', i))
-        } else {
+        } else if ((currentMonthTotals[i] / currentMonthEntries.length) < (lastMonthTotals[i] / prevMonthEntries.length)) {
             arr.push(arrow('rgb(237, 31, 9)', '⬇', i))
+        } else {
+            arr.push('')
         }
     }
     return arr
