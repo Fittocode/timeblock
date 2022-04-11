@@ -2,6 +2,12 @@ import Head from 'next/head'
 import Link from 'next/link'
 import connectDB from '../lib/mongodb' 
 import SearchBar from '../components/SearchBar/SearchBar'
+
+// authentication 
+const session = require('express-session')
+const passport = require('passport')
+require('./configs/passport')
+
 require('../models/Metric.models')
 
 export default function Home({ entries, metrics }) {
