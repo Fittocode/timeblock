@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 const {Schema, model} = mongoose
 
-const userMetricsSchema = new Schema(
+const userEntrySchema = new Schema(
     {
         date: {
             type: Date,
@@ -15,6 +15,6 @@ const userMetricsSchema = new Schema(
 
 mongoose.models = {}
 
-const UserMetrics = model('UserMetric', userMetricsSchema)
+const UserEntry = model('UserEntry', userEntrySchema)
 
-export default UserMetrics
+export default UserEntry

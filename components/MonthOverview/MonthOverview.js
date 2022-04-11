@@ -27,7 +27,7 @@ export default function MonthOverview({calenderArr, currentMonth, months, metric
             <style jsx>{`
 
             .month-overview-container {
-                min-width: 19rem;
+                max-width: 19rem;
             }
 
             `}</style>
@@ -47,6 +47,8 @@ const compareMonthTotals = (currentMonthTotals, lastMonthTotals, currentMonthEnt
     for (let i = 0; i < currentMonthTotals.length; i++) {
         if ((currentMonthTotals[i] / currentMonthEntries.length) > (lastMonthTotals[i] / prevMonthEntries.length)) {
             arr.push(arrow('rgb(0, 195, 117)', '⬆', i))
+        } else if ((currentMonthTotals[i] / currentMonthEntries.length) == (lastMonthTotals[i] / prevMonthEntries.length)) {
+            arr.push(arrow('rgb(0, 0, 0)', '=', i))
         } else {
             arr.push(arrow('rgb(237, 31, 9)', '⬇', i))
         }

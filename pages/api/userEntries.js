@@ -1,5 +1,5 @@
 import connectDB from '../../lib/mongodb';
-import userDataDB from '../../models/UserMetrics.models'
+import userEntriesDB from '../../models/UserEntry.models'
 
 export default async function handler(req, res) {
   const { method } = req
@@ -8,18 +8,18 @@ export default async function handler(req, res) {
   switch (method) {
     case 'GET':
       try {
-        const userData = await userDataDB.find({}) /* find all data in database */
-        res.status(200).json({success: true, userData: userData})
+        const userEntries = await userEntriesDB.find({}) /* find all data in database */
+        res.status(200).json({success: true, userEntries: userEntries})
       } catch (error) {
         res.status(400).json({success: false})
       }
       break;
     case 'POST':
       try {
-        const userData = await userDataDB.create(
+        const userEntries = await userEntriesDB.create(
           req.body
           ) /* create new model in database */
-        res.status(201).json({success: true, userData: userData})
+        res.status(201).json({success: true, userEntries: userEntries})
       } catch(error) {
         console.log(error.message)
         res.status(400).json({success: false})

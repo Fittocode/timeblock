@@ -1,7 +1,5 @@
 import Head from 'next/head'
 import Link from 'next/link'
-import OverviewMetrics from '../components/overviewMetrics/overviewMetrics'
-import Calender from '../components/Calender/Calender'
 import connectDB from '../lib/mongodb' 
 import SearchBar from '../components/SearchBar/SearchBar'
 require('../models/Metric.models')
@@ -155,8 +153,8 @@ export async function getServerSideProps() {
   await connectDB()
 
   /* find all the data in our database */
-  const dbData = await fetch('http://localhost:3000/api/userData')
+  const dbData = await fetch('http://localhost:3000/api/userEntries')
   const data = await dbData.json()
   
-  return { props: { entries: data.userData } }
+  return { props: { entries: data.userEntries } }
 }
