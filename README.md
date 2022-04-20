@@ -8,11 +8,11 @@ Learn how to use Next's server side rendering and static generation features, re
 
 ## Tech
 
-React
-Next.js
-MongoDB Atlas (Mongoose as client)
-Passport for user authentication (in progress on a branch)
-Style jsx 
+- React
+- Next.js
+- MongoDB Atlas (Mongoose as client)
+- Passport for user authentication (in progress on a branch)
+- Style jsx 
 
 More details to be added
 
